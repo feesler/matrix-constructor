@@ -1,7 +1,7 @@
 {
   "name": "matrix-constructor",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "release": "node ./scripts/release.js"
   },
   "dependencies": {
-    "@jezvejs/react": "^1.14.1",
+    "@jezvejs/react": "^1.14.2",
     "vite-plugin-svgr": "^4.3.0"
   },
   "devDependencies": {
