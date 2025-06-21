@@ -1,0 +1,47 @@
+.data-section {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 1rem 0;
+}
+
+.data-section > div {
+  border-bottom: 1px solid var(--settings-separator-color);
+}
+
+.data-section__header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+.data-section__header .btn.close-btn {
+  --btn-icon-color: var(--neutral-color);
+  --btn-hover-icon-color: var(--main-text-color);
+
+  width: var(--btn-size);
+}
+
+.data-footer {
+  padding-bottom: 2rem;
+}
+
+/* Paths collapsible components */
+.settings-panel-paths-collapsible .collapse__content-wrapper {
+  display: grid;
+}
+
+/* Switch field */
+.settings-panel-paths-collapsible .switch {
+  --switch-label-order: -1;
+  --switch-text-color: var(--main-text-color);
+
+  justify-content: space-between;
+  width: 100%;
+  max-width: 300px;
+  padding: 1rem;
+}
