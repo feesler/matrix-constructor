@@ -103,6 +103,9 @@ export class CanvasRenderer {
         const x = CHAR_WIDTH * Math.round(thread.x);
         const y = CHAR_HEIGHT * Math.round(thread.y - charIndex);
 
+        canvasContext.fillStyle = '#000000';
+        canvasContext.fillRect(x, y, CHAR_WIDTH, -CHAR_HEIGHT);
+
         const char = thread?.content?.charAt(charIndex);
         const lightness = 1 - ((charIndex + 1) / charsCount);
 
