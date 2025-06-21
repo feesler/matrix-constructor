@@ -11,7 +11,7 @@ export default tseslint.config(
   {
     extends: [
       js.configs.recommended,
-      // ...tseslint.configs.recommended,
+      ...tseslint.configs.recommended,
       // ...tseslint.configs.recommendedTypeChecked,
       // ...tseslint.configs.stylisticTypeChecked,
     ],
@@ -21,9 +21,26 @@ export default tseslint.config(
       globals: globals.browser,
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },
+
+    settings: {
+      react: {
+        version: 'detect',
+      },
+
+      'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx'],
+      },
+
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
+
     plugins: {
       'react-x': reactX,
       'react-dom': reactDom,
