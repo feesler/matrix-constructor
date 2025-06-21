@@ -1,7 +1,7 @@
 {
   "name": "matrix-constructor",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "repository": {
     "type": "git",
@@ -18,7 +18,9 @@
     "build": "vite build",
     "prestart": "npm install",
     "start": "vite",
-    "lint": "eslint .",
+    "lint-src": "npx eslint --quiet ./src/",
+    "lint-ts": "npx tsc -b ./ --noEmit",
+    "lint": "npm-run-all lint-src lint-ts",
     "preview": "vite preview",
     "all": "npm-run-all lint build",
     "deploy": "node ./scripts/deploy.js",
@@ -26,7 +28,7 @@
     "release": "node ./scripts/release.js"
   },
   "dependencies": {
-    "@jezvejs/react": "^1.14.1",
+    "@jezvejs/react": "^1.14.2",
     "vite-plugin-svgr": "^4.3.0"
   },
   "devDependencies": {
@@ -35,8 +37,10 @@
     "@jezvejs/release-tools": "^1.0.3",
     "@tsconfig/vite-react": "^6.3.6",
     "@types/node": "^24.0.3",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "dotenv": "^16.5.0",
     "eslint": "^9.29.0",

@@ -10,7 +10,7 @@ import type { AppState } from './types.ts';
 
 import './App.css';
 
-export default function App() {
+function App() {
   const initialState = getInitialState();
 
   return (
@@ -24,3 +24,5 @@ export default function App() {
     </StoreProvider>
   );
 }
+
+export default App;
