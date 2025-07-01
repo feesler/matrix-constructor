@@ -28,6 +28,7 @@
     "release": "node ./scripts/release.js"
   },
   "dependencies": {
+    "@jezvejs/color": "^1.1.0",
     "@jezvejs/react": "^1.14.2",
     "vite-plugin-svgr": "^4.3.0"
   },
