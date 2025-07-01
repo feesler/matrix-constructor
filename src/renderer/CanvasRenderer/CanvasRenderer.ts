@@ -88,7 +88,7 @@ export class CanvasRenderer {
       return;
     }
 
-    canvasContext.font = `${CHAR_HEIGHT}px ${CHAR_FONT}`;
+    canvasContext.font = `bold ${CHAR_HEIGHT}px ${CHAR_FONT}`;
 
     const threadCount = this.props.threads?.length ?? 0;
 
