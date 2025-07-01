@@ -1,6 +1,7 @@
+import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET, CHAR_HEIGHT, CHAR_WIDTH, MAX_CONTENT_LENGTH } from '../constants.ts';
-import type { CanvasSizeProps } from '../types.ts';
+import { ALPHABET, CHAR_HEIGHT, CHAR_WIDTH, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
+import type { CanvasSizeProps, RendererThread } from '../types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -19,21 +20,23 @@ export const shiftString = (value: string, offset: number): string => {
   return value.substring(valueEndPosition).concat(value.substring(0, valueEndPosition));
 };
 
-const formatColorPart = (value: number) => (
-  Math.round(255 * minmax(0, 1, value)).toString(16).padStart(2, '0')
-);
-
 /**
  * Returns hex color for specified value in the range {0; 1}
  * @param {number} value
  * @returns {string}
  */
-export const getGradientColor = (value: number) => {
-  const lightness = 2 * value;
-  const light = formatColorPart(minmax(1, 2, lightness) - 1);
-  const green = formatColorPart(Math.min(lightness, 1));
+export const getGradientColor = (value: number): string => {
+  const normalizedValue = minmax(0, 1, value);
+  const lightness = 95 * normalizedValue ** 2;
+  const saturation = 100 * normalizedValue;
 
-  return `#${light}${green}${light}`;
+  const rgbColor = hslToRGB({
+    hue: 120,
+    saturation,
+    lightness,
+  });
+
+  return rgbToColor(rgbColor);
 };
 
 /**
@@ -47,17 +50,30 @@ export const getRandomCharacter = () => (
 );
 
 /**
+ * Returns characters area of the screen
+ * @param {CanvasSizeProps} param0
+ * @returns {number}
+ */
+export const getScreenArea = ({ canvasWidth, canvasHeight }: CanvasSizeProps): number => {
+  const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
+  const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
+
+  return columnsCount * rowsCount;
+};
+
+/**
  * Returns new random thread object
  * @param {CanvasSizeProps} param0
  * @returns {RendererThread}
  */
-export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps) => {
+export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps): RendererThread => {
   const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
   const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
 
-  const contentLength = Math.round(Math.random() * MAX_CONTENT_LENGTH);
+  const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
+  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
 
-  const thread = {
+  const thread: RendererThread = {
     x: Math.round(Math.random() * columnsCount),
     y: Math.round(Math.random() * rowsCount),
     speed: Math.random() + 0.5,

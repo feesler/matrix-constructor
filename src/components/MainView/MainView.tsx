@@ -19,10 +19,11 @@ import { Toolbar } from 'components/Toolbar/Toolbar.tsx';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 
+import { getRandomThread, getScreenArea } from 'utils/index.ts';
+
+import { MAX_CONTENT_LENGTH, SCREEN_AREA_TO_CONTENT_RATIO } from '../../constants.ts';
 import type { AppState } from '../../types.ts';
 import { defaultProps } from './initialState.ts';
-import { getRandomThread } from 'utils/index.ts';
-import { MAX_THREADS_COUNT, MIN_THREADS_COUNT } from '../../constants.ts';
 
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
@@ -137,9 +138,9 @@ export const MainView = () => {
       return;
     }
 
-    const threadsDelta = Math.abs(MAX_THREADS_COUNT - MIN_THREADS_COUNT);
+    const screenArea = getScreenArea({ canvasWidth, canvasHeight });
+    const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
 
-    const threadsCount = Math.round(MIN_THREADS_COUNT + Math.random() * threadsDelta);
     const rendererProps = {
       canvas,
       threads: Array(threadsCount).fill(0).map(() => getRandomThread({ canvasWidth, canvasHeight })),
