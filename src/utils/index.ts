@@ -47,17 +47,30 @@ export const getRandomCharacter = () => (
 );
 
 /**
+ * Returns characters area of the screen
+ * @param {CanvasSizeProps} param0
+ * @returns {number}
+ */
+export const getScreenArea = ({ canvasWidth, canvasHeight }: CanvasSizeProps): number => {
+  const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
+  const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
+
+  return columnsCount * rowsCount;
+};
+
+/**
  * Returns new random thread object
  * @param {CanvasSizeProps} param0
  * @returns {RendererThread}
  */
-export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps) => {
+export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps): RendererThread => {
   const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
   const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
 
-  const contentLength = Math.round(Math.random() * MAX_CONTENT_LENGTH);
+  const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
+  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
 
-  const thread = {
+  const thread: RendererThread = {
     x: Math.round(Math.random() * columnsCount),
     y: Math.round(Math.random() * rowsCount),
     speed: Math.random() + 0.5,
