@@ -197,7 +197,7 @@ export const MainView = () => {
 
     dispatch(actions.setFontLoading(true));
 
-    const font = new FontFace('code', 'url(matrix-constructor/assets/code.woff)');
+    const font = new FontFace('code', 'url("assets/code.woff")');
     await font.load();
     document.fonts.add(font);
 
