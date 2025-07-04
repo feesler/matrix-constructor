@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/matrix-constructor',
+  base: '/matrix-constructor/',
   plugins: [react(), svgr({ include: '**/*.svg' })],
   resolve: {
     alias: {
