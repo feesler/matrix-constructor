@@ -11,6 +11,16 @@ export interface InitRendererProps {
 
 // Reducers
 const slice = createSlice<AppState>({
+  setFontLoaded: (state: AppState) => ({
+    ...state,
+    fontLoaded: true,
+  }),
+
+  setFontLoading: (state: AppState, fontLoading: boolean) => ({
+    ...state,
+    fontLoading,
+  }),
+
   resetRenderer: (state: AppState) => ({
     ...state,
     paused: true,

@@ -1,6 +1,6 @@
 import type { CanvasFrame } from 'utils/CanvasFrame/CanvasFrame.ts';
 import type { Canvas, RendererThread, RGBAColor, RGBColor } from '../../types.ts';
-import { CHAR_FONT, CHAR_HEIGHT, CHAR_WIDTH } from '../../constants.ts';
+import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../constants.ts';
 import { getGradientColor, shiftString } from 'utils/index.ts';
 
 export interface CanvasRendererProps {
@@ -58,28 +58,10 @@ export class CanvasRenderer {
     }
 
     const { canvasWidth, canvasHeight } = this.props;
-
-
     const frame = canvas.createFrame({ width: canvasWidth, height: canvasHeight });
     if (!frame) {
       return;
     }
-
-    /*
-    const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
-    const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
-
-    for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-      for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-        const color = { r: 0, g: 255, b: 0 };
-
-        const x = CHAR_WIDTH * columnIndex;
-        const y = CHAR_HEIGHT * rowIndex;
-
-        this.putPixel(frame, x, y, color);
-      }
-    }
-    */
 
     canvas.drawFrame(frame);
 
@@ -88,10 +70,9 @@ export class CanvasRenderer {
       return;
     }
 
-    canvasContext.font = `bold ${CHAR_HEIGHT}px ${CHAR_FONT}`;
+    canvasContext.font = `${CHAR_WEIGHT} ${CHAR_HEIGHT}px ${CHAR_FONT}`;
 
     const threadCount = this.props.threads?.length ?? 0;
-
     for (let threadIndex = 0; threadIndex < threadCount; threadIndex++) {
       const thread = this.props.threads[threadIndex];
       if (!thread) {

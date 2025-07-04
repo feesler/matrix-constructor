@@ -74,6 +74,9 @@ export interface CanvasSizeProps {
 }
 
 export interface AppState {
+  fontLoaded: boolean;
+  fontLoading: boolean;
+
   autoStart: boolean;
 
   animationDelay: number;

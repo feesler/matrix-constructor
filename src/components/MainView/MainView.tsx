@@ -103,7 +103,23 @@ export const MainView = () => {
     dispatch(actions.requestFitToScreen(notResized));
   };
 
-  const resizeHandler = () => {
+  const waitForFontLoad = async () => (
+    new Promise((resolve) => {
+      const checkState = () => {
+        const st = getState();
+
+        if (st.fontLoaded) {
+          resolve(true);
+        } else {
+          setTimeout(checkState, 50);
+        }
+      };
+
+      checkState();
+    })
+  );
+
+  const resizeHandler = async () => {
     const st = getState();
     const rect = mainRef.current?.getBoundingClientRect() ?? null;
     if (!rect) {
@@ -138,6 +154,8 @@ export const MainView = () => {
       return;
     }
 
+    await waitForFontLoad();
+
     const screenArea = getScreenArea({ canvasWidth, canvasHeight });
     const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
 
@@ -149,10 +167,7 @@ export const MainView = () => {
     };
 
     rendererRef.current = new CanvasRenderer(rendererProps);
-
-    setTimeout(() => {
-      rendererRef?.current?.drawFrame();
-    }, 10);
+    rendererRef.current.drawFrame();
 
     if (!pausedBefore) {
       dispatch(run(context));
@@ -173,10 +188,35 @@ export const MainView = () => {
     };
   }, [mainRef.current]);
 
-  useEffect(() => {
+  // Font loading
+  const loadFont = async () => {
+    const st = getState();
+    if (st.fontLoaded || st.fontLoading) {
+      return;
+    }
+
+    dispatch(actions.setFontLoading(true));
+
+    const font = new FontFace('code', 'url(matrix-constructor/assets/code.woff)');
+    await font.load();
+    document.fonts.add(font);
+
+    dispatch(actions.setFontLoading(false));
+    dispatch(actions.setFontLoaded());
+
+    await waitForFontLoad();
+  };
+
+  const init = async () => {
+    await loadFont();
+
     start();
 
     resetRenderer();
+  };
+
+  useEffect(() => {
+    init();
   }, []);
 
   const onClose = useCallback(() => {
