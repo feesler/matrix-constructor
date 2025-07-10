@@ -1,4 +1,4 @@
-import type { Canvas2DElement } from './components/Canvas2D/Canvas2D.tsx';
+import type { Canvas2DElement } from '../components/Canvas2D/Canvas2D.tsx';
 
 export interface IdObject {
   id: string;
@@ -88,6 +88,7 @@ export interface AppState {
   height: number;
 
   threads: RendererThread[];
+  speed: number;
 
   fitToScreenRequested: boolean;
 

@@ -1,5 +1,5 @@
 import { createSlice } from '@jezvejs/react';
-import type { AppState, CanvasSizeProps, RendererThread } from '../types.ts';
+import type { AppState, CanvasSizeProps, RendererThread } from 'shared/types.ts';
 
 export interface InitRendererProps {
   width: number;
@@ -65,6 +65,7 @@ const slice = createSlice<AppState>({
 
   run: (state: AppState): AppState => ({ ...state, paused: false }),
 
+  setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
 });
 

@@ -1,5 +1,5 @@
-import { SCENE_SIZE } from '../../constants.ts';
-import type { AppState } from '../../types.ts';
+import { SCENE_SIZE } from '../../shared/constants.ts';
+import type { AppState } from '../../shared/types.ts';
 
 export const defaultProps = {
   autoStart: false,
@@ -21,6 +21,7 @@ export const initialState: AppState = {
   perfValue: 0,
   canvasWidth: 0,
   canvasHeight: 0,
+  speed: 1,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

@@ -5,7 +5,7 @@ import {
   useRef,
 } from 'react';
 
-import { CanvasFrame } from '../../utils/CanvasFrame/CanvasFrame.ts';
+import { CanvasFrame } from '../../shared/utils/CanvasFrame/CanvasFrame.ts';
 
 export interface CreateFrameParams {
   width: number;

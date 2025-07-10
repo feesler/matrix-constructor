@@ -1,13 +1,13 @@
 import { CloseButton, useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
+import type { AppState } from '../../shared/types.ts';
 import { actions } from 'store/reducer.ts';
 
-import { MenuButton } from 'components/MenuButton/MenuButton.tsx';
-import { ResetButton } from 'components/ResetButton/ResetButton.tsx';
-import { ToggleRunButton } from 'components/ToggleRunButton/ToggleRunButton.tsx';
+import { MenuButton } from './components/MenuButton/MenuButton.tsx';
+import { ResetButton } from './components/ResetButton/ResetButton.tsx';
+import { ToggleRunButton } from './components/ToggleRunButton/ToggleRunButton.tsx';
 
-import type { AppState } from '../../types.ts';
 import './Toolbar.css';
 
 export interface ToolbarProps {

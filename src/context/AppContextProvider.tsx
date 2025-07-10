@@ -10,7 +10,7 @@ import type { Canvas2DRef } from 'components/Canvas2D/Canvas2D.tsx';
 import type { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 import { actions } from 'store/reducer.ts';
 
-import { type AppState } from '../types.ts';
+import { type AppState } from '../shared/types.ts';
 import { ApplicationContext } from './context.ts';
 
 export interface AppContextProviderProps {
@@ -68,7 +68,7 @@ export function AppContextProvider(
     dispatch(actions.setUpdating(true));
     const pBefore = performance.now();
 
-    renderer.calculate();
+    renderer.calculate(st);
     renderer.drawFrame();
 
     const perfValue = Math.round(performance.now() - pBefore);

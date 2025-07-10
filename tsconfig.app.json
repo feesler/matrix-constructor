@@ -34,6 +34,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
+      "app/*": [
+        "./src/app/*"
+      ],
       "components/*": [
         "./src/components/*"
       ],
@@ -43,11 +46,11 @@
       "renderer/*": [
         "./src/renderer/*"
       ],
+      "shared/*": [
+        "./src/shared/*"
+      ],
       "store/*": [
         "./src/store/*"
-      ],
-      "utils/*": [
-        "./src/utils/*"
       ]
     },
   },

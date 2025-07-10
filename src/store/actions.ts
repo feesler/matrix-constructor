@@ -2,7 +2,7 @@ import { type StoreActionAPI, type StoreActionFunction } from '@jezvejs/react';
 
 import { type AppContext } from 'context/index';
 
-import { type AppState } from '../types.ts';
+import { type AppState } from 'shared/types.ts';
 import { actions } from './reducer.ts';
 
 export interface MainViewActionsAPI {

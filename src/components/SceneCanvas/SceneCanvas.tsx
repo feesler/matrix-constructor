@@ -5,7 +5,7 @@ import { useAppContext } from 'context/index';
 
 import { Canvas2D } from 'components/Canvas2D/Canvas2D.tsx';
 
-import type { AppState } from '../../types.ts';
+import type { AppState } from '../../shared/types.ts';
 
 export const SceneCanvas = () => {
   const context = useAppContext();

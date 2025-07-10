@@ -7,17 +7,24 @@ import svgr from 'vite-plugin-svgr';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const customAliasPaths = [
+  'app',
+  'components',
+  'context',
+  'renderer',
+  'shared',
+  'store',
+];
+
 // https://vite.dev/config/
 export default defineConfig({
   base: '/matrix-constructor/',
   plugins: [react(), svgr({ include: '**/*.svg' })],
   resolve: {
     alias: {
-      "components": path.resolve(__dirname, "./src/components"),
-      "context": path.resolve(__dirname, "./src/context"),
-      "renderer": path.resolve(__dirname, "./src/renderer"),
-      "store": path.resolve(__dirname, "./src/store"),
-      "utils": path.resolve(__dirname, "./src/utils"),
+      ...Object.fromEntries(customAliasPaths.map((item) => ([
+        item, path.resolve(__dirname, `./src/${item}`),
+      ]))),
     },
   },
   optimizeDeps: {

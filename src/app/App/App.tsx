@@ -1,12 +1,12 @@
 import { StoreProvider } from '@jezvejs/react';
 
-import { MainView } from './components/MainView/MainView.tsx';
-import { getInitialState } from './components/MainView/initialState.ts';
-import { AppContextProvider } from './context/AppContextProvider.tsx';
+import { MainView } from '../../components/MainView/MainView.tsx';
+import { getInitialState } from './initialState.ts';
+import { AppContextProvider } from '../../context/AppContextProvider.tsx';
 
-import { reducer } from './store/reducer.ts';
+import { reducer } from '../../store/reducer.ts';
 
-import type { AppState } from './types.ts';
+import type { AppState } from '../../shared/types.ts';
 
 import './App.css';
 
