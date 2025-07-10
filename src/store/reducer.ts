@@ -1,5 +1,5 @@
 import { createSlice } from '@jezvejs/react';
-import type { AppState, CanvasSizeProps, RendererThread } from '../types.ts';
+import type { AppState, CanvasSizeProps, RendererThread } from 'shared/types.ts';
 
 export interface InitRendererProps {
   width: number;

@@ -1,4 +1,4 @@
-import { RangeInputField, type RangeInputFieldProps } from 'components/RangeInputField/RangeInputField.tsx';
+import { RangeInputField, type RangeInputFieldProps } from '../RangeInputField/RangeInputField.tsx';
 
 export interface RangeInputFieldsListProps {
   fields: RangeInputFieldProps[];

@@ -8,11 +8,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const customAliasPaths = [
+  'app',
   'components',
   'context',
   'renderer',
+  'shared',
   'store',
-  'utils',
 ];
 
 // https://vite.dev/config/

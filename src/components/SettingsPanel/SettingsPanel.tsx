@@ -2,10 +2,10 @@ import { useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
 import { useAppContext } from 'context/index';
-import type { AppState } from '../../types.ts';
+import type { AppState } from '../../shared/types.ts';
 import { actions } from 'store/reducer.ts';
 
-import { ReadOnlyField } from 'components/ReadOnlyField/ReadOnlyField.tsx';
+import { ReadOnlyField } from 'components/SettingsPanel/components/ReadOnlyField/ReadOnlyField.tsx';
 
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
 

@@ -1,7 +1,7 @@
-import type { CanvasFrame } from 'utils/CanvasFrame/CanvasFrame.ts';
-import type { AppState, Canvas, RendererThread, RGBAColor, RGBColor } from '../../types.ts';
-import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../constants.ts';
-import { getGradientColor, shiftString } from 'utils/index.ts';
+import type { CanvasFrame } from 'shared/utils/CanvasFrame/CanvasFrame.ts';
+import type { AppState, Canvas, RendererThread, RGBAColor, RGBColor } from '../../shared/types.ts';
+import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../shared/constants.ts';
+import { getGradientColor, shiftString } from 'shared/utils/index.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;

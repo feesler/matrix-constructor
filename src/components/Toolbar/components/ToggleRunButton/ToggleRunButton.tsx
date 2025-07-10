@@ -1,6 +1,6 @@
 import { Button, useStore, type ButtonProps } from '@jezvejs/react';
 
-import type { AppState } from '../../types.ts';
+import type { AppState } from '../../../../shared/types.ts';
 import PauseIcon from './assets/pause.svg';
 import PlayIcon from './assets/play.svg';
 

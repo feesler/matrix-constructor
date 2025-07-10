@@ -19,11 +19,11 @@ import { Toolbar } from 'components/Toolbar/Toolbar.tsx';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 
-import { getRandomThread, getScreenArea } from 'utils/index.ts';
+import { getRandomThread, getScreenArea } from 'shared/utils/index.ts';
 
-import { MAX_CONTENT_LENGTH, SCREEN_AREA_TO_CONTENT_RATIO } from '../../constants.ts';
-import type { AppState } from '../../types.ts';
-import { defaultProps } from './initialState.ts';
+import { MAX_CONTENT_LENGTH, SCREEN_AREA_TO_CONTENT_RATIO } from '../../shared/constants.ts';
+import type { AppState } from '../../shared/types.ts';
+import { defaultProps } from '../../app/App/initialState.ts';
 
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
