@@ -120,7 +120,7 @@ export const MainView = () => {
   );
 
   const resizeHandler = async () => {
-    const st = getState();
+    let st = getState();
     const rect = mainRef.current?.getBoundingClientRect() ?? null;
     if (!rect) {
       return;
@@ -159,9 +159,10 @@ export const MainView = () => {
     const screenArea = getScreenArea({ canvasWidth, canvasHeight });
     const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
 
+    st = getState();
     const rendererProps = {
       canvas,
-      threads: Array(threadsCount).fill(0).map(() => getRandomThread({ canvasWidth, canvasHeight })),
+      threads: Array(threadsCount).fill(0).map(() => getRandomThread(st)),
       canvasWidth,
       canvasHeight,
     };

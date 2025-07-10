@@ -1,5 +1,5 @@
 import type { CanvasFrame } from 'utils/CanvasFrame/CanvasFrame.ts';
-import type { Canvas, RendererThread, RGBAColor, RGBColor } from '../../types.ts';
+import type { AppState, Canvas, RendererThread, RGBAColor, RGBColor } from '../../types.ts';
 import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../constants.ts';
 import { getGradientColor, shiftString } from 'utils/index.ts';
 
@@ -14,7 +14,7 @@ export class CanvasRenderer {
   constructor(public props: CanvasRendererProps) {
   }
 
-  calculate() {
+  calculate(state: AppState) {
     const { canvasHeight } = this.props;
     const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
 
@@ -22,7 +22,7 @@ export class CanvasRenderer {
       const { content } = thread;
       const result = { ...thread };
 
-      const targetY = result.y + result.speed;
+      const targetY = result.y + (result.speed * state.speed);
 
       if (targetY >= rowsCount + content.length) {
         result.y = 0;

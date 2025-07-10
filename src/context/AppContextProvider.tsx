@@ -68,7 +68,7 @@ export function AppContextProvider(
     dispatch(actions.setUpdating(true));
     const pBefore = performance.now();
 
-    renderer.calculate();
+    renderer.calculate(st);
     renderer.drawFrame();
 
     const perfValue = Math.round(performance.now() - pBefore);

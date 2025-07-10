@@ -88,6 +88,7 @@ export interface AppState {
   height: number;
 
   threads: RendererThread[];
+  speed: number;
 
   fitToScreenRequested: boolean;
 

@@ -21,6 +21,7 @@ export const initialState: AppState = {
   perfValue: 0,
   canvasWidth: 0,
   canvasHeight: 0,
+  speed: 1,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

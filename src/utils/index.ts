@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
 import { ALPHABET, CHAR_HEIGHT, CHAR_WIDTH, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
-import type { CanvasSizeProps, RendererThread } from '../types.ts';
+import type { AppState, CanvasSizeProps, RendererThread } from '../types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -63,10 +63,10 @@ export const getScreenArea = ({ canvasWidth, canvasHeight }: CanvasSizeProps): n
 
 /**
  * Returns new random thread object
- * @param {CanvasSizeProps} param0
+ * @param {AppState} param0
  * @returns {RendererThread}
  */
-export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps): RendererThread => {
+export const getRandomThread = ({ canvasWidth, canvasHeight }: AppState): RendererThread => {
   const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
   const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
 
@@ -76,7 +76,7 @@ export const getRandomThread = ({ canvasWidth, canvasHeight }: CanvasSizeProps):
   const thread: RendererThread = {
     x: Math.round(Math.random() * columnsCount),
     y: Math.round(Math.random() * rowsCount),
-    speed: Math.random() + 0.5,
+    speed: Math.random(),
     content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
   };
 

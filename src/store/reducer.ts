@@ -65,6 +65,7 @@ const slice = createSlice<AppState>({
 
   run: (state: AppState): AppState => ({ ...state, paused: false }),
 
+  setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
 });
 
