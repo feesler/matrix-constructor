@@ -4,6 +4,9 @@ import { type AppContext } from 'context/index';
 
 import { type AppState } from 'shared/types.ts';
 import { actions } from './reducer.ts';
+import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils/index.ts';
+import { MAX_CONTENT_LENGTH, SCREEN_AREA_TO_CONTENT_RATIO } from 'shared/constants.ts';
+import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 
 export interface MainViewActionsAPI {
   scheduleUpdate: () => void;
@@ -32,3 +35,29 @@ export const run = ({ scheduleUpdate }: AppContext) => ({
   scheduleUpdate?.();
 };
 
+export const resizeBuffer = (context: AppContext): StoreActionFunction<AppState> => ({ getState }) => {
+  const st = getState();
+  const { canvasWidth, canvasHeight, columnsCount, rowsCount } = st;
+  const screenArea = getScreenArea(st);
+  const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
+  const glitchesCount = Math.round(threadsCount * st.glitchesRatio);
+
+  const { getCanvas, rendererRef } = context;
+  const canvas = getCanvas();
+  if (!rendererRef || !canvas) {
+    return;
+  }
+
+  const rendererProps = {
+    canvas,
+    threads: Array(threadsCount).fill(0).map(() => getRandomThread(st)),
+    glitches: Array(glitchesCount).fill(0).map(() => getRandomGlitch(st)),
+    canvasWidth,
+    canvasHeight,
+    columnsCount,
+    rowsCount,
+  };
+
+  rendererRef.current = new CanvasRenderer(rendererProps);
+  rendererRef.current.drawFrame();
+};

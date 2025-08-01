@@ -7,6 +7,7 @@ export const defaultProps = {
   width: SCENE_SIZE,
   height: SCENE_SIZE,
   threads: [],
+  glitches: [],
 };
 
 export const initialState: AppState = {
@@ -21,7 +22,10 @@ export const initialState: AppState = {
   perfValue: 0,
   canvasWidth: 0,
   canvasHeight: 0,
+  columnsCount: 0,
+  rowsCount: 0,
   speed: 1,
+  glitchesRatio: 0.5,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

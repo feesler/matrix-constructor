@@ -8,7 +8,7 @@ import {
   useRef,
 } from 'react';
 
-import { pause, run } from 'store/actions.ts';
+import { pause, resizeBuffer, run } from 'store/actions.ts';
 import { actions } from 'store/reducer.ts';
 
 import { useAppContext } from 'context/index';
@@ -19,11 +19,8 @@ import { Toolbar } from 'components/Toolbar/Toolbar.tsx';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 
-import { getRandomThread, getScreenArea } from 'shared/utils/index.ts';
-
-import { MAX_CONTENT_LENGTH, SCREEN_AREA_TO_CONTENT_RATIO } from '../../shared/constants.ts';
-import type { AppState } from '../../shared/types.ts';
 import { defaultProps } from '../../app/App/initialState.ts';
+import type { AppState } from '../../shared/types.ts';
 
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
@@ -45,8 +42,11 @@ export const MainView = () => {
     const rendererProps = {
       canvas,
       threads: [],
+      glitches: [],
       canvasWidth: st.canvasWidth,
       canvasHeight: st.canvasHeight,
+      columnsCount: st.columnsCount,
+      rowsCount: st.rowsCount,
     };
 
     rendererRef.current = new CanvasRenderer(rendererProps);
@@ -120,7 +120,7 @@ export const MainView = () => {
   );
 
   const resizeHandler = async () => {
-    let st = getState();
+    const st = getState();
     const rect = mainRef.current?.getBoundingClientRect() ?? null;
     if (!rect) {
       return;
@@ -149,26 +149,10 @@ export const MainView = () => {
       fitToScreen();
     }
 
-    const canvas = getCanvas();
-    if (!rendererRef || !canvas) {
-      return;
-    }
 
     await waitForFontLoad();
 
-    const screenArea = getScreenArea({ canvasWidth, canvasHeight });
-    const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
-
-    st = getState();
-    const rendererProps = {
-      canvas,
-      threads: Array(threadsCount).fill(0).map(() => getRandomThread(st)),
-      canvasWidth,
-      canvasHeight,
-    };
-
-    rendererRef.current = new CanvasRenderer(rendererProps);
-    rendererRef.current.drawFrame();
+    dispatch(resizeBuffer(context));
 
     if (!pausedBefore) {
       dispatch(run(context));

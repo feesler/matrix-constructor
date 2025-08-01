@@ -2,13 +2,14 @@ import { useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
 import { useAppContext } from 'context/index';
-import type { AppState } from '../../shared/types.ts';
 import { actions } from 'store/reducer.ts';
+import type { AppState } from '../../shared/types.ts';
 
 import { ReadOnlyField } from 'components/SettingsPanel/components/ReadOnlyField/ReadOnlyField.tsx';
 
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
 
+import { resizeBuffer } from 'store/actions.ts';
 import './SettingsPanel.css';
 
 export const SettingsPanel = () => {
@@ -18,6 +19,11 @@ export const SettingsPanel = () => {
 
   const onChangeSpeed = useCallback((value: number) => {
     dispatch(actions.setSpeed(value));
+  }, []);
+
+  const onChangeGlitches = useCallback((value: number) => {
+    dispatch(actions.setGlitches(value));
+    dispatch(resizeBuffer(context));
   }, []);
 
   const { threads } = context?.rendererRef?.current?.props ?? {};
@@ -44,6 +50,16 @@ export const SettingsPanel = () => {
         step={1}
         value={state.speed}
         onChange={onChangeSpeed}
+      />
+
+      <RangeInputField
+        id="glitchesInp"
+        title="Glitches ratio"
+        min={0}
+        max={1}
+        step={0.01}
+        value={state.glitchesRatio}
+        onChange={onChangeGlitches}
       />
 
       <div className="data-footer">
