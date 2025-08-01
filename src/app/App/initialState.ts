@@ -21,6 +21,8 @@ export const initialState: AppState = {
   perfValue: 0,
   canvasWidth: 0,
   canvasHeight: 0,
+  columnsCount: 0,
+  rowsCount: 0,
   speed: 1,
 };
 

@@ -10,26 +10,96 @@ export interface CanvasRendererProps {
   canvasHeight: number;
 }
 
+export interface ScreenChar {
+  char: string;
+  fillStyle: string;
+  column: number;
+  row: number;
+  x: number;
+  y: number;
+}
+
 export class CanvasRenderer {
+  buffer: ScreenChar[][] = [];
+
   constructor(public props: CanvasRendererProps) {
+  }
+
+  createBuffer(state: AppState) {
+    const { columnsCount, rowsCount } = state;
+
+    this.buffer = [];
+
+    for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+      const column: ScreenChar[] = [];
+      const x = CHAR_WIDTH * columnIndex;
+
+      for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+        column.push({
+          char: '',
+          fillStyle: '',
+          column: columnIndex,
+          row: rowIndex,
+          x,
+          y: CHAR_HEIGHT * rowIndex,
+        });
+      }
+
+      this.buffer.push(column);
+    }
+  }
+
+  writeToBuffer(column: number, row: number, char: string, fillStyle: string) {
+    if (column < 0 || column >= this.buffer.length) {
+      return;
+    }
+
+    const bufferColumn = this.buffer[column];
+    if (row < 0 || row >= bufferColumn.length) {
+      return;
+    }
+
+    const screenChar = bufferColumn[row];
+    screenChar.char = char;
+    screenChar.fillStyle = fillStyle;
   }
 
   calculate(state: AppState) {
     const { canvasHeight } = this.props;
     const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
 
+    this.createBuffer(state);
+
     this.props.threads = this.props.threads.map((thread) => {
       const { content } = thread;
       const result = { ...thread };
+      const stepMove = result.speed * state.speed;
+      const targetY = result.y + stepMove;
 
-      const targetY = result.y + (result.speed * state.speed);
-
-      if (targetY >= rowsCount + content.length) {
+      if (targetY > rowsCount + content.length) {
         result.y = 0;
       } else {
-        const shift = Math.round(targetY) - Math.round(result.y);
         result.y = targetY;
+
+        const shift = Math.trunc(result.y) - Math.trunc(result.row);
         result.content = shiftString(content, shift);
+      }
+      result.row = Math.trunc(result.y);
+
+      const charsCount = result.content?.length ?? 0;
+      for (let charIndex = 0; charIndex < charsCount; charIndex++) {
+        const lightness = 1 - ((charIndex + 1) / charsCount);
+
+        const column = Math.round(result.x);
+        const row = result.row - charIndex;
+        const fillStyle = getGradientColor(lightness);
+
+        this.writeToBuffer(
+          column,
+          row,
+          result.content?.charAt(charIndex),
+          fillStyle,
+        );
       }
 
       return result;
@@ -71,26 +141,23 @@ export class CanvasRenderer {
     }
 
     canvasContext.font = `${CHAR_WEIGHT} ${CHAR_HEIGHT}px ${CHAR_FONT}`;
+    canvasContext.textBaseline = 'top';
 
-    const threadCount = this.props.threads?.length ?? 0;
-    for (let threadIndex = 0; threadIndex < threadCount; threadIndex++) {
-      const thread = this.props.threads[threadIndex];
-      if (!thread) {
+    const columnsCount = this.buffer.length ?? 0;
+    for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+      const column = this.buffer[columnIndex];
+      if (!column) {
         continue;
       }
 
-      const charsCount = thread?.content?.length ?? 0;
-      for (let charIndex = 0; charIndex < charsCount; charIndex++) {
-        const x = CHAR_WIDTH * Math.round(thread.x);
-        const y = CHAR_HEIGHT * Math.round(thread.y - charIndex);
+      const rowsCount = column?.length ?? 0;
+      for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+        const { char, x, y, fillStyle } = column[rowIndex];
+        if (char.length === 0) {
+          continue;
+        }
 
-        canvasContext.fillStyle = '#000000';
-        canvasContext.fillRect(x, y, CHAR_WIDTH, -CHAR_HEIGHT);
-
-        const char = thread?.content?.charAt(charIndex);
-        const lightness = 1 - ((charIndex + 1) / charsCount);
-
-        canvasContext.fillStyle = getGradientColor(lightness);
+        canvasContext.fillStyle = fillStyle;
         canvasContext.fillText(char, x, y, CHAR_WIDTH);
       }
     }

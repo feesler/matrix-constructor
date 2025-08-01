@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET, CHAR_HEIGHT, CHAR_WIDTH, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
-import type { AppState, CanvasSizeProps, RendererThread } from '../types.ts';
+import { ALPHABET, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
+import type { AppState, RendererThread } from '../types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -54,28 +54,27 @@ export const getRandomCharacter = () => (
  * @param {CanvasSizeProps} param0
  * @returns {number}
  */
-export const getScreenArea = ({ canvasWidth, canvasHeight }: CanvasSizeProps): number => {
-  const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
-  const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
-
-  return columnsCount * rowsCount;
-};
+export const getScreenArea = ({ columnsCount, rowsCount }: AppState): number => (
+  columnsCount * rowsCount
+);
 
 /**
  * Returns new random thread object
  * @param {AppState} param0
  * @returns {RendererThread}
  */
-export const getRandomThread = ({ canvasWidth, canvasHeight }: AppState): RendererThread => {
-  const columnsCount = Math.floor(canvasWidth / CHAR_WIDTH);
-  const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
-
+export const getRandomThread = ({ columnsCount, rowsCount }: AppState): RendererThread => {
   const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
   const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
 
+  const column = Math.round(Math.random() * columnsCount);
+  const row = Math.round(Math.random() * rowsCount);
+
   const thread: RendererThread = {
-    x: Math.round(Math.random() * columnsCount),
-    y: Math.round(Math.random() * rowsCount),
+    column,
+    row,
+    x: column,
+    y: row,
     speed: Math.random(),
     content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
   };

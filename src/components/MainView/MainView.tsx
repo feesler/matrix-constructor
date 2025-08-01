@@ -156,10 +156,10 @@ export const MainView = () => {
 
     await waitForFontLoad();
 
-    const screenArea = getScreenArea({ canvasWidth, canvasHeight });
+    st = getState();
+    const screenArea = getScreenArea(st);
     const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * SCREEN_AREA_TO_CONTENT_RATIO);
 
-    st = getState();
     const rendererProps = {
       canvas,
       threads: Array(threadsCount).fill(0).map(() => getRandomThread(st)),

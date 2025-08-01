@@ -62,6 +62,8 @@ export interface View {
 }
 
 export interface RendererThread {
+  column: number;
+  row: number;
   x: number;
   y: number;
   speed: number;
@@ -81,8 +83,13 @@ export interface AppState {
 
   animationDelay: number;
 
+  // Size of canvas in pixels
   canvasWidth: number;
   canvasHeight: number;
+
+  // Size of canvas in characters
+  columnsCount: number;
+  rowsCount: number;
 
   width: number;
   height: number;
