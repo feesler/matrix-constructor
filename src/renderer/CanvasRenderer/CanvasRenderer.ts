@@ -1,13 +1,23 @@
 import type { CanvasFrame } from 'shared/utils/CanvasFrame/CanvasFrame.ts';
-import type { AppState, Canvas, RendererThread, RGBAColor, RGBColor } from '../../shared/types.ts';
+import type {
+  AppState,
+  Canvas,
+  RendererGlitch,
+  RendererThread,
+  RGBAColor,
+  RGBColor,
+} from '../../shared/types.ts';
 import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../shared/constants.ts';
 import { getGradientColor, shiftString } from 'shared/utils/index.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;
   threads: RendererThread[];
+  glitches: RendererGlitch[];
   canvasWidth: number;
   canvasHeight: number;
+  columnsCount: number;
+  rowsCount: number;
 }
 
 export interface ScreenChar {
@@ -64,11 +74,31 @@ export class CanvasRenderer {
     screenChar.fillStyle = fillStyle;
   }
 
-  calculate(state: AppState) {
-    const { canvasHeight } = this.props;
-    const rowsCount = Math.floor(canvasHeight / CHAR_HEIGHT);
+  readFromBuffer(column: number, row: number): ScreenChar | null {
+    if (column < 0 || column >= this.buffer.length) {
+      return null;
+    }
 
+    const bufferColumn = this.buffer[column];
+    if (row < 0 || row >= bufferColumn.length) {
+      return null;
+    }
+
+    const screenChar = bufferColumn[row];
+    return {
+      ...screenChar,
+    };
+  }
+
+  calculate(state: AppState) {
     this.createBuffer(state);
+
+    this.calculateThreads(state);
+    this.calculateGlitches(state);
+  }
+
+  calculateThreads(state: AppState) {
+    const { rowsCount } = state;
 
     this.props.threads = this.props.threads.map((thread) => {
       const { content } = thread;
@@ -101,6 +131,34 @@ export class CanvasRenderer {
           fillStyle,
         );
       }
+
+      return result;
+    });
+  }
+
+  calculateGlitches(state: AppState) {
+    this.props.glitches = this.props.glitches.map((glitch) => {
+      const result = { ...glitch };
+      const stepMove = result.speed * state.speed;
+      result.progress += stepMove;
+
+      const shift = Math.trunc(result.progress);
+      if (shift > 0) {
+        result.content = shiftString(result.content, shift);
+        result.progress = 0;
+      }
+
+      const column = Math.round(result.column);
+      const row = Math.round(result.row);
+      const lightness = 0.5;
+      const fillStyle = getGradientColor(lightness);
+
+      this.writeToBuffer(
+        column,
+        row,
+        result.content?.charAt(0),
+        fillStyle,
+      );
 
       return result;
     });
@@ -143,16 +201,15 @@ export class CanvasRenderer {
     canvasContext.font = `${CHAR_WEIGHT} ${CHAR_HEIGHT}px ${CHAR_FONT}`;
     canvasContext.textBaseline = 'top';
 
-    const columnsCount = this.buffer.length ?? 0;
+    const { columnsCount, rowsCount } = this.props;
     for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-      const column = this.buffer[columnIndex];
-      if (!column) {
-        continue;
-      }
-
-      const rowsCount = column?.length ?? 0;
       for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-        const { char, x, y, fillStyle } = column[rowIndex];
+        const bufferChar = this.readFromBuffer(columnIndex, rowIndex);
+        if (!bufferChar) {
+          continue;
+        }
+
+        const { char, x, y, fillStyle } = bufferChar;
         if (char.length === 0) {
           continue;
         }

@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
 import { ALPHABET, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
-import type { AppState, RendererThread } from '../types.ts';
+import type { AppState, RendererGlitch, RendererThread } from '../types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -80,4 +80,27 @@ export const getRandomThread = ({ columnsCount, rowsCount }: AppState): Renderer
   };
 
   return thread;
+};
+
+/**
+ * Returns new random glitch object
+ * @param {AppState} param0
+ * @returns {RendererGlitch}
+ */
+export const getRandomGlitch = ({ columnsCount, rowsCount }: AppState): RendererGlitch => {
+  const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
+  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
+
+  const column = Math.round(Math.random() * columnsCount);
+  const row = Math.round(Math.random() * rowsCount);
+
+  const glitch: RendererGlitch = {
+    column,
+    row,
+    progress: 0,
+    speed: 0.5 * Math.random(),
+    content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
+  };
+
+  return glitch;
 };

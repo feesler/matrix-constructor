@@ -70,6 +70,14 @@ export interface RendererThread {
   content: string;
 }
 
+export interface RendererGlitch {
+  column: number;
+  row: number;
+  progress: number;
+  speed: number;
+  content: string;
+}
+
 export interface CanvasSizeProps {
   canvasWidth: number;
   canvasHeight: number;
@@ -96,6 +104,9 @@ export interface AppState {
 
   threads: RendererThread[];
   speed: number;
+
+  glitches: RendererGlitch[];
+  glitchesRatio: number;
 
   fitToScreenRequested: boolean;
 

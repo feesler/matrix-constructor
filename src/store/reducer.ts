@@ -70,6 +70,7 @@ const slice = createSlice<AppState>({
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
+  setGlitches: (state: AppState, glitchesRatio: number): AppState => ({ ...state, glitchesRatio }),
 });
 
 export const { actions, reducer } = slice;
