@@ -21,8 +21,13 @@ export const SettingsPanel = () => {
     dispatch(actions.setSpeed(value));
   }, []);
 
-  const onChangeGlitches = useCallback((value: number) => {
+  const onChangeGlitchesRatio = useCallback((value: number) => {
     dispatch(actions.setGlitches(value));
+    dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeThreadsRatio = useCallback((value: number) => {
+    dispatch(actions.setThreadsRatio(value));
     dispatch(resizeBuffer(context));
   }, []);
 
@@ -53,13 +58,23 @@ export const SettingsPanel = () => {
       />
 
       <RangeInputField
+        id="threadsInp"
+        title="Threads ratio"
+        min={0}
+        max={10}
+        step={0.01}
+        value={state.threadsRatio}
+        onChange={onChangeThreadsRatio}
+      />
+
+      <RangeInputField
         id="glitchesInp"
         title="Glitches ratio"
         min={0}
         max={1}
         step={0.01}
         value={state.glitchesRatio}
-        onChange={onChangeGlitches}
+        onChange={onChangeGlitchesRatio}
       />
 
       <div className="data-footer">

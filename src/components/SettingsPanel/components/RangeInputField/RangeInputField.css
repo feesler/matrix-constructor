@@ -38,11 +38,11 @@
 
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+}
 
-  &.range-slider_x-axis .range-slider__area {
-    margin-left: 1px;
-    margin-right: 1px;
-  }
+.range-input-field .range-slider.range-slider_x-axis .range-slider__area {
+  margin-left: 1px;
+  margin-right: 1px;
 }
 
 .range-input-field .range-input__value {

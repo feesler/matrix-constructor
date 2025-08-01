@@ -25,6 +25,7 @@ export const initialState: AppState = {
   columnsCount: 0,
   rowsCount: 0,
   speed: 1,
+  threadsRatio: 0.75,
   glitchesRatio: 0.5,
 };
 
