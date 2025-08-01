@@ -6,7 +6,6 @@ export const CHAR_HEIGHT = 18; // 16;
 export const MIN_CONTENT_LENGTH = 15;
 export const MAX_CONTENT_LENGTH = 25;
 
-export const SCREEN_AREA_TO_CONTENT_RATIO = 0.75;
 export const CHAR_WEIGHT = 'normal';
 export const CHAR_FONT = 'code';
 

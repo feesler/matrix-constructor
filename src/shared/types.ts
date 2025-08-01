@@ -103,6 +103,7 @@ export interface AppState {
   height: number;
 
   threads: RendererThread[];
+  threadsRatio: number;
   speed: number;
 
   glitches: RendererGlitch[];

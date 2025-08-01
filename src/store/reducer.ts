@@ -70,6 +70,8 @@ const slice = createSlice<AppState>({
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
+  setThreadsRatio: (state: AppState, threadsRatio: number): AppState => ({ ...state, threadsRatio }),
+
   setGlitches: (state: AppState, glitchesRatio: number): AppState => ({ ...state, glitchesRatio }),
 });
 
