@@ -1,3 +1,4 @@
+import '@jezvejs/react/style.scss';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
