@@ -7,7 +7,7 @@ import type {
   RGBAColor,
   RGBColor,
 } from '../../shared/types.ts';
-import { CHAR_FONT, CHAR_HEIGHT, CHAR_WEIGHT, CHAR_WIDTH } from '../../shared/constants.ts';
+import { CHAR_FONT } from '../../shared/constants.ts';
 import { getGradientColor, shiftString } from 'shared/utils/index.ts';
 
 export interface CanvasRendererProps {
@@ -36,13 +36,13 @@ export class CanvasRenderer {
   }
 
   createBuffer(state: AppState) {
-    const { columnsCount, rowsCount } = state;
+    const { columnsCount, rowsCount, charWidth, charHeight } = state;
 
     this.buffer = [];
 
     for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
       const column: ScreenChar[] = [];
-      const x = CHAR_WIDTH * columnIndex;
+      const x = charWidth * columnIndex;
 
       for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         column.push({
@@ -51,7 +51,7 @@ export class CanvasRenderer {
           column: columnIndex,
           row: rowIndex,
           x,
-          y: CHAR_HEIGHT * rowIndex,
+          y: charHeight * rowIndex,
         });
       }
 
@@ -179,7 +179,7 @@ export class CanvasRenderer {
     );
   }
 
-  drawFrameByPixels() {
+  drawFrameByPixels(state: AppState) {
     const { canvas } = this.props;
     if (!canvas) {
       return;
@@ -198,7 +198,9 @@ export class CanvasRenderer {
       return;
     }
 
-    canvasContext.font = `${CHAR_WEIGHT} ${CHAR_HEIGHT}px ${CHAR_FONT}`;
+    const { fontSize, fontWeight, charWidth } = state;
+
+    canvasContext.font = `${fontWeight} ${fontSize}px ${CHAR_FONT}`;
     canvasContext.textBaseline = 'top';
 
     const { columnsCount, rowsCount } = this.props;
@@ -215,12 +217,12 @@ export class CanvasRenderer {
         }
 
         canvasContext.fillStyle = fillStyle;
-        canvasContext.fillText(char, x, y, CHAR_WIDTH);
+        canvasContext.fillText(char, x, y, charWidth);
       }
     }
   }
 
-  drawFrame() {
-    this.drawFrameByPixels();
+  drawFrame(state: AppState) {
+    this.drawFrameByPixels(state);
   }
 }

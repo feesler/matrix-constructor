@@ -1,13 +1,14 @@
-import { useStore } from '@jezvejs/react';
+import { DropDownSelectionParam, useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
 import { useAppContext } from 'context/index';
 import { actions } from 'store/reducer.ts';
 import type { AppState } from '../../shared/types.ts';
+import { fontWeightsItems } from 'shared/constants.ts';
 
-import { ReadOnlyField } from 'components/SettingsPanel/components/ReadOnlyField/ReadOnlyField.tsx';
-
+import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
+import { SelectField } from './components/SelectField/SelectField.tsx';
 
 import { resizeBuffer } from 'store/actions.ts';
 import './SettingsPanel.css';
@@ -29,6 +30,28 @@ export const SettingsPanel = () => {
   const onChangeThreadsRatio = useCallback((value: number) => {
     dispatch(actions.setThreadsRatio(value));
     dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeFontSize = useCallback((value: number) => {
+    dispatch(actions.setFontSize(value));
+    // dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeFontWeight = useCallback((selected: DropDownSelectionParam) => {
+    if (selected && !Array.isArray(selected)) {
+      dispatch(actions.setFontWeight(selected.id));
+    }
+    // dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeCharWidth = useCallback((value: number) => {
+    dispatch(actions.setCharWidth(value));
+    // dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeCharHeight = useCallback((value: number) => {
+    dispatch(actions.setCharHeight(value));
+    // dispatch(resizeBuffer(context));
   }, []);
 
   const { threads } = context?.rendererRef?.current?.props ?? {};
@@ -75,6 +98,43 @@ export const SettingsPanel = () => {
         step={0.01}
         value={state.glitchesRatio}
         onChange={onChangeGlitchesRatio}
+      />
+
+      <RangeInputField
+        id="fontSizeInp"
+        title="Font size"
+        min={0}
+        max={100}
+        step={0.01}
+        value={state.fontSize}
+        onChange={onChangeFontSize}
+      />
+
+      <SelectField
+        id="fontWeightSelect"
+        title="Font weight"
+        items={fontWeightsItems}
+        onChange={onChangeFontWeight}
+      />
+
+      <RangeInputField
+        id="charWidthInp"
+        title="Char width"
+        min={0}
+        max={100}
+        step={1}
+        value={state.charWidth}
+        onChange={onChangeCharWidth}
+      />
+
+      <RangeInputField
+        id="charHeightInp"
+        title="Char height"
+        min={0}
+        max={100}
+        step={1}
+        value={state.charHeight}
+        onChange={onChangeCharHeight}
       />
 
       <div className="data-footer">

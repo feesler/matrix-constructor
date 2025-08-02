@@ -60,7 +60,7 @@ export function AppContextProvider(
       return;
     }
 
-    const st = getState();
+    let st = getState();
     if (st.paused || st.updating) {
       return;
     }
@@ -69,7 +69,9 @@ export function AppContextProvider(
     const pBefore = performance.now();
 
     renderer.calculate(st);
-    renderer.drawFrame();
+
+    st = getState();
+    renderer.drawFrame(st);
 
     const perfValue = Math.round(performance.now() - pBefore);
     dispatch(actions.setPerformance(perfValue));

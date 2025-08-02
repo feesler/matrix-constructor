@@ -27,6 +27,10 @@ export const initialState: AppState = {
   speed: 1,
   threadsRatio: 0.75,
   glitchesRatio: 0.5,
+  fontSize: 18,
+  fontWeight: 'normal',
+  charWidth: 10,
+  charHeight: 18,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({
