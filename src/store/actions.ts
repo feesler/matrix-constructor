@@ -59,5 +59,5 @@ export const resizeBuffer = (context: AppContext): StoreActionFunction<AppState>
   };
 
   rendererRef.current = new CanvasRenderer(rendererProps);
-  rendererRef.current.drawFrame();
+  rendererRef.current.drawFrame(st);
 };

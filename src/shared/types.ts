@@ -102,6 +102,12 @@ export interface AppState {
   width: number;
   height: number;
 
+  fontSize: number;
+  fontWeight: string;
+
+  charWidth: number;
+  charHeight: number;
+
   threads: RendererThread[];
   threadsRatio: number;
   speed: number;

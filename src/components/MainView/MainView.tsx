@@ -51,7 +51,7 @@ export const MainView = () => {
 
     rendererRef.current = new CanvasRenderer(rendererProps);
 
-    rendererRef.current?.drawFrame();
+    rendererRef.current?.drawFrame(st);
 
     if (st.autoStart) {
       dispatch(run(context));

@@ -1,5 +1,4 @@
 import { createSlice } from '@jezvejs/react';
-import { CHAR_HEIGHT, CHAR_WIDTH } from 'shared/constants.ts';
 import type { AppState, CanvasSizeProps, RendererThread } from 'shared/types.ts';
 
 export interface InitRendererProps {
@@ -46,8 +45,8 @@ const slice = createSlice<AppState>({
     ...state,
     canvasWidth,
     canvasHeight,
-    columnsCount: Math.ceil(canvasWidth / CHAR_WIDTH),
-    rowsCount: Math.ceil(canvasHeight / CHAR_HEIGHT),
+    columnsCount: Math.ceil(canvasWidth / state.charWidth),
+    rowsCount: Math.ceil(canvasHeight / state.charHeight),
   }),
 
   setTimestamp: (state: AppState, timestamp: number): AppState => ({ ...state, timestamp }),
@@ -73,6 +72,14 @@ const slice = createSlice<AppState>({
   setThreadsRatio: (state: AppState, threadsRatio: number): AppState => ({ ...state, threadsRatio }),
 
   setGlitches: (state: AppState, glitchesRatio: number): AppState => ({ ...state, glitchesRatio }),
+
+  setFontSize: (state: AppState, fontSize: number): AppState => ({ ...state, fontSize }),
+
+  setFontWeight: (state: AppState, fontWeight: string): AppState => ({ ...state, fontWeight }),
+
+  setCharWidth: (state: AppState, charWidth: number): AppState => ({ ...state, charWidth }),
+
+  setCharHeight: (state: AppState, charHeight: number): AppState => ({ ...state, charHeight }),
 });
 
 export const { actions, reducer } = slice;
