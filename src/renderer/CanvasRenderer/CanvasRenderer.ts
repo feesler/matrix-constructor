@@ -8,7 +8,7 @@ import type {
   RGBColor,
 } from '../../shared/types.ts';
 import { CHAR_FONT } from '../../shared/constants.ts';
-import { getGradientColor, shiftString } from 'shared/utils/index.ts';
+import { getGradientColor, getRandomGlitch, getRandomThread, shiftString } from 'shared/utils/index.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;
@@ -102,11 +102,12 @@ export class CanvasRenderer {
 
     this.props.threads = this.props.threads.map((thread) => {
       const { content } = thread;
-      const result = { ...thread };
-      const stepMove = result.speed * state.speed;
-      const targetY = result.y + stepMove;
+      const stepMove = thread.speed * state.speed;
+      const targetY = thread.y + stepMove;
 
+      let result = { ...thread };
       if (targetY > rowsCount + content.length) {
+        result = getRandomThread(state);
         result.y = 0;
       } else {
         result.y = targetY;
@@ -138,14 +139,19 @@ export class CanvasRenderer {
 
   calculateGlitches(state: AppState) {
     this.props.glitches = this.props.glitches.map((glitch) => {
-      const result = { ...glitch };
+      let result = { ...glitch };
       const stepMove = result.speed * state.speed;
       result.progress += stepMove;
+      result.currentProgress += stepMove;
 
-      const shift = Math.trunc(result.progress);
+      const shift = Math.trunc(result.currentProgress);
       if (shift > 0) {
         result.content = shiftString(result.content, shift);
-        result.progress = 0;
+        result.currentProgress = 0;
+      }
+
+      if (result.progress >= result.content.length) {
+        result = getRandomGlitch(state);
       }
 
       const column = Math.round(result.column);

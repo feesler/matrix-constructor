@@ -74,6 +74,7 @@ export interface RendererGlitch {
   column: number;
   row: number;
   progress: number;
+  currentProgress: number;
   speed: number;
   content: string;
 }
