@@ -40,7 +40,7 @@ export const resizeBuffer = (context: AppContext): StoreActionFunction<AppState>
   const { canvasWidth, canvasHeight, columnsCount, rowsCount } = st;
   const screenArea = getScreenArea(st);
   const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * st.threadsRatio);
-  const glitchesCount = Math.round(threadsCount * st.glitchesRatio);
+  const glitchesCount = Math.round(screenArea * st.glitchesRatio);
 
   const { getCanvas, rendererRef } = context;
   const canvas = getCanvas();

@@ -98,6 +98,7 @@ export const getRandomGlitch = ({ columnsCount, rowsCount }: AppState): Renderer
     column,
     row,
     progress: 0,
+    currentProgress: 0,
     speed: 0.5 * Math.random(),
     content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
   };
