@@ -1,5 +1,5 @@
 import { createSlice } from '@jezvejs/react';
-import type { AppState, CanvasSizeProps, RendererThread } from 'shared/types.ts';
+import type { AppState, CanvasSizeProps, RendererGlitch, RendererThread } from 'shared/types.ts';
 
 export interface InitRendererProps {
   width: number;
@@ -69,9 +69,13 @@ const slice = createSlice<AppState>({
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
+  setThreads: (state: AppState, threads: RendererThread[]): AppState => ({ ...state, threads: structuredClone(threads) }),
+
   setThreadsRatio: (state: AppState, threadsRatio: number): AppState => ({ ...state, threadsRatio }),
 
-  setGlitches: (state: AppState, glitchesRatio: number): AppState => ({ ...state, glitchesRatio }),
+  setGlitches: (state: AppState, glitches: RendererGlitch[]): AppState => ({ ...state, glitches: structuredClone(glitches) }),
+
+  setGlitchesRatio: (state: AppState, glitchesRatio: number): AppState => ({ ...state, glitchesRatio }),
 
   setFontSize: (state: AppState, fontSize: number): AppState => ({ ...state, fontSize }),
 
