@@ -70,6 +70,9 @@ export function AppContextProvider(
 
     renderer.calculate(st);
 
+    dispatch(actions.setThreads(renderer.props.threads));
+    dispatch(actions.setGlitches(renderer.props.glitches));
+
     st = getState();
     renderer.drawFrame(st);
 

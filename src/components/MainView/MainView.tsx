@@ -149,7 +149,6 @@ export const MainView = () => {
       fitToScreen();
     }
 
-
     await waitForFontLoad();
 
     dispatch(resizeBuffer(context));
@@ -208,11 +207,17 @@ export const MainView = () => {
     dispatch(actions.showOffcanvas(false));
   }, []);
 
+  const fontst = getState();
+  const fontReady = fontst.fontLoaded && !fontst.fontLoading;
+  const loading = !fontReady;
+
   return (
     <div id="maincontainer" className="container">
       <main className="main-container" ref={mainRef}>
         <SceneCanvas />
       </main>
+
+      {loading && <div className="loading">Loading...</div>}
 
       <Toolbar onToggleRun={onToggleRun} onReset={onReset} onClose={onClose} />
 

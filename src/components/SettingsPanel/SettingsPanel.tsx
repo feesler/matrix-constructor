@@ -23,7 +23,7 @@ export const SettingsPanel = () => {
   }, []);
 
   const onChangeGlitchesRatio = useCallback((value: number) => {
-    dispatch(actions.setGlitches(value));
+    dispatch(actions.setGlitchesRatio(value));
     dispatch(resizeBuffer(context));
   }, []);
 
