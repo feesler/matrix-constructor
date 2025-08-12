@@ -3,7 +3,7 @@ import {
   type ReactNode,
   useCallback,
   useMemo,
-  useRef
+  useRef,
 } from 'react';
 
 import type { Canvas2DRef } from 'components/Canvas2D/Canvas2D.tsx';
@@ -52,7 +52,6 @@ export function AppContextProvider(
     }, 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const update = () => {
     const renderer = rendererRef.current;

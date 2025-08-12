@@ -1,17 +1,17 @@
 import { type StoreActionAPI, type StoreActionFunction } from '@jezvejs/react';
 
-import { type AppContext } from 'context/index';
+import { type AppContext } from 'context/index.ts';
 
-import { type AppState } from 'shared/types.ts';
-import { actions } from './reducer.ts';
-import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils/index.ts';
-import { MAX_CONTENT_LENGTH } from 'shared/constants.ts';
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
+import { MAX_CONTENT_LENGTH } from 'shared/constants.ts';
+import { type AppState } from 'shared/types.ts';
+import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils/index.ts';
+import { actions } from './reducer.ts';
 
 export interface MainViewActionsAPI {
   scheduleUpdate: () => void;
   processRotation: (a: number, b: number, g: number) => void;
-};
+}
 
 export const pause = (): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
   const st = getState();
@@ -35,9 +35,16 @@ export const run = ({ scheduleUpdate }: AppContext) => ({
   scheduleUpdate?.();
 };
 
-export const resizeBuffer = (context: AppContext): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
+export const resizeBuffer = (
+  context: AppContext,
+): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
   const st = getState();
-  const { canvasWidth, canvasHeight, columnsCount, rowsCount } = st;
+  const {
+    canvasWidth,
+    canvasHeight,
+    columnsCount,
+    rowsCount,
+  } = st;
   const screenArea = getScreenArea(st);
 
   const { getCanvas, rendererRef } = context;

@@ -1,4 +1,4 @@
-import type { CanvasFrame } from 'shared/utils/CanvasFrame/CanvasFrame.ts';
+import { CHAR_FONT } from 'shared/constants.ts';
 import type {
   AppState,
   Canvas,
@@ -6,9 +6,14 @@ import type {
   RendererThread,
   RGBAColor,
   RGBColor,
-} from '../../shared/types.ts';
-import { CHAR_FONT } from '../../shared/constants.ts';
-import { getGradientColor, getRandomGlitch, getRandomThread, shiftString } from 'shared/utils/index.ts';
+} from 'shared/types.ts';
+import type { CanvasFrame } from 'shared/utils/CanvasFrame/CanvasFrame.ts';
+import {
+  getGradientColor,
+  getRandomGlitch,
+  getRandomThread,
+  shiftString,
+} from 'shared/utils/index.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;
@@ -36,7 +41,12 @@ export class CanvasRenderer {
   }
 
   createBuffer(state: AppState) {
-    const { columnsCount, rowsCount, charWidth, charHeight } = state;
+    const {
+      columnsCount,
+      rowsCount,
+      charWidth,
+      charHeight,
+    } = state;
 
     this.buffer = [];
 
@@ -217,7 +227,12 @@ export class CanvasRenderer {
           continue;
         }
 
-        const { char, x, y, fillStyle } = bufferChar;
+        const {
+          char,
+          x,
+          y,
+          fillStyle,
+        } = bufferChar;
         if (char.length === 0) {
           continue;
         }

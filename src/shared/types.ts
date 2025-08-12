@@ -2,7 +2,7 @@ import type { Canvas2DElement } from '../components/Canvas2D/Canvas2D.tsx';
 
 export interface IdObject {
   id: string;
-};
+}
 
 /**
  * Coordinates point
@@ -19,17 +19,19 @@ export interface RGBColor {
   r: number;
   g: number;
   b: number;
-};
+}
 
 /**
  * RGBA color
  */
 export interface RGBAColor extends RGBColor {
   a: number;
-};
+}
 
-
-export type MenuItemCallback = <T extends object = object, R = boolean>(item: T, index?: number, arr?: T[]) => R;
+export type MenuItemCallback = <
+  T extends object = object,
+  R = boolean,
+>(item: T, index?: number, arr?: T[]) => R;
 
 /**
  * shouldIncludeParentItem() function params

@@ -5,7 +5,7 @@ import { useMemo } from 'react';
  * @param {string} id
  */
 export const usePortalElement = (id = 'custom-root') => (
-    useMemo(() => (
-        document.getElementById(id)
-    ), [id])
+  useMemo(() => (
+    document.getElementById(id)
+  ), [id])
 );

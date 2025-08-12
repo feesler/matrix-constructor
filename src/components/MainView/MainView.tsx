@@ -1,6 +1,6 @@
 import {
   Offcanvas,
-  useStore
+  useStore,
 } from '@jezvejs/react';
 import {
   useCallback,
@@ -8,19 +8,19 @@ import {
   useRef,
 } from 'react';
 
+import { defaultProps } from 'app/App/initialState.ts';
 import { pause, resizeBuffer, run } from 'store/actions.ts';
 import { actions } from 'store/reducer.ts';
 
-import { useAppContext } from 'context/index';
+import { useAppContext } from 'context/index.ts';
+
+import type { AppState } from 'shared/types.ts';
 
 import { SceneCanvas } from 'components/SceneCanvas/SceneCanvas.tsx';
 import { SettingsPanel } from 'components/SettingsPanel/SettingsPanel.tsx';
 import { Toolbar } from 'components/Toolbar/Toolbar.tsx';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
-
-import { defaultProps } from '../../app/App/initialState.ts';
-import type { AppState } from '../../shared/types.ts';
 
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
