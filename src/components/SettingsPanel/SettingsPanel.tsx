@@ -1,16 +1,18 @@
 import { DropDownSelectionParam, useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
-import { useAppContext } from 'context/index';
-import { actions } from 'store/reducer.ts';
-import type { AppState } from '../../shared/types.ts';
-import { fontWeightsItems } from 'shared/constants.ts';
-
-import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
-import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
-import { SelectField } from './components/SelectField/SelectField.tsx';
+import { useAppContext } from 'context/index.ts';
 
 import { resizeBuffer } from 'store/actions.ts';
+import { actions } from 'store/reducer.ts';
+
+import { fontWeightsItems } from 'shared/constants.ts';
+import type { AppState } from 'shared/types.ts';
+
+import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
+import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
+import { SelectField } from './components/SelectField/SelectField.tsx';
+
 import './SettingsPanel.css';
 
 export const SettingsPanel = () => {

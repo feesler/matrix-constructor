@@ -17,7 +17,7 @@ export interface Canvas2DElement {
   createFrame: (frameProps: CreateFrameParams) => CanvasFrame | null;
   drawFrame: (frame: CanvasFrame) => void;
   clear: () => void;
-};
+}
 
 export type Canvas2DRef = Canvas2DElement | null;
 

@@ -1,7 +1,7 @@
 import { useStore } from '@jezvejs/react';
 import { useMemo } from 'react';
 
-import { useAppContext } from 'context/index';
+import { useAppContext } from 'context/index.ts';
 
 import { Canvas2D } from 'components/Canvas2D/Canvas2D.tsx';
 

@@ -1,7 +1,7 @@
 import { CloseButton, useStore } from '@jezvejs/react';
 import { useCallback } from 'react';
 
-import type { AppState } from '../../shared/types.ts';
+import type { AppState } from 'shared/types.ts';
 import { actions } from 'store/reducer.ts';
 
 import { MenuButton } from './components/MenuButton/MenuButton.tsx';
@@ -17,7 +17,7 @@ export interface ToolbarProps {
   onReset: () => void;
   onClose: () => void;
   onMenu?: () => void;
-};
+}
 
 export const Toolbar = (props: ToolbarProps) => {
   const {

@@ -45,7 +45,7 @@ export const getGradientColor = (value: number): string => {
  */
 export const getRandomCharacter = () => (
   ALPHABET.charAt(
-    Math.round(Math.random() * ALPHABET.length)
+    Math.round(Math.random() * ALPHABET.length),
   )
 );
 

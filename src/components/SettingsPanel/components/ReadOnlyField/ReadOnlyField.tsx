@@ -4,7 +4,7 @@ export interface ReadOnlyFieldProps {
   id?: string;
   title?: string;
   value?: string | number;
-};
+}
 
 export const ReadOnlyField = ({ id, title, value }: ReadOnlyFieldProps) => (
   <div id={id} className="read-only-field">
