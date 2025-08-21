@@ -1,6 +1,6 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET, MAX_CONTENT_LENGTH, MIN_CONTENT_LENGTH } from '../constants.ts';
+import { ALPHABET, CONTENT_LENGTH_DELTA, MIN_CONTENT_LENGTH } from '../constants.ts';
 import type { AppState, RendererGlitch, RendererThread } from '../types.ts';
 
 /**
@@ -58,24 +58,37 @@ export const getScreenArea = ({ columnsCount, rowsCount }: AppState): number => 
   columnsCount * rowsCount
 );
 
+const roundToPrecision = (value: number, precision: number) => {
+  const base = 10 ** Math.round(precision);
+  return Math.ceil(value * base) / base;
+};
+
 /**
  * Returns new random thread object
- * @param {AppState} param0
+ * @param {AppState} state
  * @returns {RendererThread}
  */
-export const getRandomThread = ({ columnsCount, rowsCount }: AppState): RendererThread => {
-  const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
-  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
+export const getRandomThread = (state: AppState): RendererThread => {
+  const { columnsCount, rowsCount } = state;
+
+  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
 
   const column = Math.round(Math.random() * columnsCount);
   const row = Math.round(Math.random() * rowsCount);
+
+  // const speed = Math.ceil(Math.random() * 2) / 2; // {0.5, 1.0}
+  // const speed = Math.random(); // [0.5, 1.0]
+  // const speed = Math.random() * 0.5 + 0.5; // [0.5, 1.0]
+  // const speed = roundToPrecision(Math.random() * 0.7 + 0.3, 1); // {0.3, 0.4, ... 0.9, 1.0}
+
+  const speed = roundToPrecision(Math.random(), 1); // {0.1, 0.2, ... 0.9, 1.0}
 
   const thread: RendererThread = {
     column,
     row,
     x: column,
     y: row,
-    speed: Math.random(),
+    speed,
     content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
   };
 
@@ -88,18 +101,18 @@ export const getRandomThread = ({ columnsCount, rowsCount }: AppState): Renderer
  * @returns {RendererGlitch}
  */
 export const getRandomGlitch = ({ columnsCount, rowsCount }: AppState): RendererGlitch => {
-  const contentLengthDelta = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
-  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * contentLengthDelta);
+  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
 
   const column = Math.round(Math.random() * columnsCount);
   const row = Math.round(Math.random() * rowsCount);
+  const speed = Math.ceil(Math.random() * 2) / 2;
 
   const glitch: RendererGlitch = {
     column,
     row,
     progress: 0,
     currentProgress: 0,
-    speed: 0.5 * Math.random(),
+    speed,
     content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
   };
 

@@ -1,7 +1,12 @@
 export const SCENE_SIZE = 100;
 
-export const MIN_CONTENT_LENGTH = 15;
-export const MAX_CONTENT_LENGTH = 48;
+export const MIN_CONTENT_LENGTH = 30;
+export const MAX_CONTENT_LENGTH = 60;
+export const CONTENT_LENGTH_DELTA = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;
+
+export const FRAMES_PER_SECOND = 60;
+export const FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
+export const FRAME_DURATION_SEC = FRAME_DURATION / 1000;
 
 export const fontWeightsItems = [
   { id: '100', title: '100' },

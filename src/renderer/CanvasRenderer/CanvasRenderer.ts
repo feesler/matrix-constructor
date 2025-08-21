@@ -1,4 +1,4 @@
-import { CHAR_FONT } from 'shared/constants.ts';
+import { CHAR_FONT, FRAMES_PER_SECOND } from 'shared/constants.ts';
 import type {
   AppState,
   Canvas,
@@ -100,19 +100,21 @@ export class CanvasRenderer {
     };
   }
 
-  calculate(state: AppState) {
+  calculate(state: AppState, timeDelta: number) {
     this.createBuffer(state);
 
-    this.calculateThreads(state);
-    this.calculateGlitches(state);
+    this.calculateThreads(state, timeDelta);
+    this.calculateGlitches(state, timeDelta);
   }
 
-  calculateThreads(state: AppState) {
+  calculateThreads(state: AppState, timeDelta: number) {
     const { rowsCount } = state;
 
     this.props.threads = this.props.threads.map((thread) => {
       const { content } = thread;
-      const stepMove = thread.speed * state.speed;
+
+      // Calculate thread movement
+      const stepMove = (thread.speed * state.speed * timeDelta);
       const targetY = thread.y + stepMove;
 
       let result = { ...thread };
@@ -127,6 +129,7 @@ export class CanvasRenderer {
       }
       result.row = Math.trunc(result.y);
 
+      // Write thread content to the buffer
       const charsCount = result.content?.length ?? 0;
       for (let charIndex = 0; charIndex < charsCount; charIndex++) {
         const lightness = 1 - ((charIndex + 1) / charsCount);
@@ -147,10 +150,10 @@ export class CanvasRenderer {
     });
   }
 
-  calculateGlitches(state: AppState) {
+  calculateGlitches(state: AppState, timeDelta: number) {
     this.props.glitches = this.props.glitches.map((glitch) => {
       let result = { ...glitch };
-      const stepMove = result.speed * state.speed;
+      const stepMove = (result.speed * state.speed * timeDelta) / FRAMES_PER_SECOND;
       result.progress += stepMove;
       result.currentProgress += stepMove;
 
