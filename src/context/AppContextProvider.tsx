@@ -8,9 +8,9 @@ import {
 
 import type { Canvas2DRef } from 'components/Canvas2D/Canvas2D.tsx';
 import type { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
+import { type AppState } from 'shared/types.ts';
 import { actions } from 'store/reducer.ts';
 
-import { type AppState } from '../shared/types.ts';
 import { ApplicationContext } from './context.ts';
 
 export interface AppContextProviderProps {
@@ -26,6 +26,7 @@ export function AppContextProvider(
 
   const { getState, dispatch } = useStore<AppState>();
 
+  const previousFrameTimestamp = useRef<number>(0);
   const updateTimeout = useRef<number>(0);
 
   const rendererRef = useRef<CanvasRenderer | null>(null);
@@ -48,12 +49,12 @@ export function AppContextProvider(
 
     updateTimeout.current = setTimeout(() => {
       updateTimeout.current = 0;
-      requestAnimationFrame(() => update());
+      requestAnimationFrame(update);
     }, 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const update = () => {
+  const update = (time: number) => {
     const renderer = rendererRef.current;
     if (!renderer) {
       return;
@@ -67,7 +68,12 @@ export function AppContextProvider(
     dispatch(actions.setUpdating(true));
     const pBefore = performance.now();
 
-    renderer.calculate(st);
+    const curTime = time * 0.001;
+    const prevTime = previousFrameTimestamp.current;
+    const timeDelta = (prevTime !== 0) ? (curTime - prevTime) : 0;
+    previousFrameTimestamp.current = curTime;
+
+    renderer.calculate(st, timeDelta);
 
     dispatch(actions.setThreads(renderer.props.threads));
     dispatch(actions.setGlitches(renderer.props.glitches));
@@ -79,7 +85,7 @@ export function AppContextProvider(
     dispatch(actions.setPerformance(perfValue));
 
     if (!st.paused) {
-      scheduleUpdate();
+      requestAnimationFrame(update);
     }
 
     dispatch(actions.setUpdating(false));
