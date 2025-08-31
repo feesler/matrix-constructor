@@ -64,17 +64,35 @@ const roundToPrecision = (value: number, precision: number) => {
 };
 
 /**
+ * Returns random characters string of specified length
+ * @param {number} length
+ * @returns {string}
+ */
+export const getRandomString = (length: number): string => {
+  if (length <= 0) {
+    return '';
+  }
+
+  const characters = [];
+  for (let i = 0; i < length; i++) {
+    characters.push(getRandomCharacter());
+  }
+
+  return characters.join('');
+};
+
+/**
  * Returns new random thread object
  * @param {AppState} state
  * @returns {RendererThread}
  */
 export const getRandomThread = (state: AppState): RendererThread => {
-  const { columnsCount, rowsCount } = state;
+  const { columnsCount, rowsCount, intro } = state;
 
   const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
 
   const column = Math.round(Math.random() * columnsCount);
-  const row = Math.round(Math.random() * rowsCount);
+  const row = Math.round(Math.random() * rowsCount) - (intro ? rowsCount : 0);
 
   // const speed = Math.ceil(Math.random() * 2) / 2; // {0.5, 1.0}
   // const speed = Math.random(); // [0.5, 1.0]
@@ -89,7 +107,7 @@ export const getRandomThread = (state: AppState): RendererThread => {
     x: column,
     y: row,
     speed,
-    content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
+    content: getRandomString(contentLength),
   };
 
   return thread;
@@ -98,22 +116,33 @@ export const getRandomThread = (state: AppState): RendererThread => {
 /**
  * Returns new random glitch object
  * @param {AppState} param0
+ * @param {boolean} randomOffset
  * @returns {RendererGlitch}
  */
-export const getRandomGlitch = ({ columnsCount, rowsCount }: AppState): RendererGlitch => {
-  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
+export const getRandomGlitch = (
+  { threads }: AppState,
+  randomOffset: boolean = true,
+): RendererGlitch => {
+  const threadIndex = Math.round(Math.random() * (threads.length - 1));
+  const thread = threads[threadIndex] ?? { column: 0, row: 0, content: '' };
 
-  const column = Math.round(Math.random() * columnsCount);
-  const row = Math.round(Math.random() * rowsCount);
-  const speed = Math.ceil(Math.random() * 2) / 2;
+  const glitchOffset = (randomOffset) ? Math.floor(Math.random() * thread.content.length) : 0;
+  const remainingChars = thread.content.length - glitchOffset;
+
+  const { column } = thread;
+  const row = thread.row - glitchOffset;
+
+  const speed = 10 + Math.round(Math.random() * thread.speed);
+  const contentLength = Math.round(Math.random() * remainingChars);
 
   const glitch: RendererGlitch = {
+    threadIndex,
     column,
     row,
     progress: 0,
     currentProgress: 0,
     speed,
-    content: Array(contentLength).fill(0).map(() => getRandomCharacter()).join(''),
+    content: getRandomString(contentLength),
   };
 
   return glitch;

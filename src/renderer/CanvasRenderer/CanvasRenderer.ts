@@ -69,7 +69,7 @@ export class CanvasRenderer {
     }
   }
 
-  writeToBuffer(column: number, row: number, char: string, fillStyle: string) {
+  writeToBuffer(column: number, row: number, char: string, fillStyle?: string) {
     if (column < 0 || column >= this.buffer.length) {
       return;
     }
@@ -81,7 +81,9 @@ export class CanvasRenderer {
 
     const screenChar = bufferColumn[row];
     screenChar.char = char;
-    screenChar.fillStyle = fillStyle;
+    if (typeof fillStyle === 'string') {
+      screenChar.fillStyle = fillStyle;
+    }
   }
 
   readFromBuffer(column: number, row: number): ScreenChar | null {
@@ -153,6 +155,13 @@ export class CanvasRenderer {
   calculateGlitches(state: AppState, timeDelta: number) {
     this.props.glitches = this.props.glitches.map((glitch) => {
       let result = { ...glitch };
+
+      if (!this.props.threads[result.threadIndex]) {
+        result.threadIndex = Math.round(Math.random() * (this.props.threads.length - 1));
+      }
+
+      const thread = this.props.threads[result.threadIndex];
+
       const stepMove = (result.speed * state.speed * timeDelta) / FRAMES_PER_SECOND;
       result.progress += stepMove;
       result.currentProgress += stepMove;
@@ -163,20 +172,20 @@ export class CanvasRenderer {
         result.currentProgress = 0;
       }
 
-      if (result.progress >= result.content.length) {
-        result = getRandomGlitch(state);
+      if (
+        result.progress >= result.content.length
+        || (result.column !== thread.column || (result.row <= thread.row - thread.content.length))
+      ) {
+        result = getRandomGlitch(state, false);
       }
 
       const column = Math.round(result.column);
       const row = Math.round(result.row);
-      const lightness = 0.5;
-      const fillStyle = getGradientColor(lightness);
 
       this.writeToBuffer(
         column,
         row,
         result.content?.charAt(0),
-        fillStyle,
       );
 
       return result;

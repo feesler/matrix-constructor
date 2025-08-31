@@ -73,6 +73,7 @@ export interface RendererThread {
 }
 
 export interface RendererGlitch {
+  threadIndex: number;
   column: number;
   row: number;
   progress: number;
@@ -91,6 +92,7 @@ export interface AppState {
   fontLoading: boolean;
 
   autoStart: boolean;
+  intro: boolean;
 
   animationDelay: number;
 

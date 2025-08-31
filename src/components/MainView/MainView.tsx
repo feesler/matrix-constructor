@@ -31,6 +31,11 @@ export const MainView = () => {
     dispatch(actions.initRenderer({ ...defaultProps }));
   };
 
+  const initBufferAndRun = () => {
+    dispatch(resizeBuffer(context));
+    dispatch(run(context));
+  };
+
   const start = () => {
     const st = getState();
 
@@ -54,7 +59,7 @@ export const MainView = () => {
     rendererRef.current?.drawFrame(st);
 
     if (st.autoStart) {
-      dispatch(run(context));
+      initBufferAndRun();
     }
   };
 
@@ -79,8 +84,10 @@ export const MainView = () => {
   };
 
   const onToggleRun = () => {
-    if (state.paused) {
-      dispatch(run(context));
+    const { paused } = getState();
+
+    if (paused) {
+      initBufferAndRun();
     } else {
       dispatch(pause());
     }
@@ -151,10 +158,8 @@ export const MainView = () => {
 
     await waitForFontLoad();
 
-    dispatch(resizeBuffer(context));
-
     if (!pausedBefore) {
-      dispatch(run(context));
+      initBufferAndRun();
     }
   };
 

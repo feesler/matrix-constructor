@@ -12,6 +12,7 @@ export const defaultProps = {
 
 export const initialState: AppState = {
   ...defaultProps,
+  intro: true,
   fontLoaded: false,
   fontLoading: false,
   fitToScreenRequested: false,
@@ -26,7 +27,7 @@ export const initialState: AppState = {
   rowsCount: 0,
   speed: 40,
   threadsRatio: 1.5,
-  glitchesRatio: 0.02,
+  glitchesRatio: 0.05,
   fontSize: 18,
   fontWeight: 'normal',
   charWidth: 10,

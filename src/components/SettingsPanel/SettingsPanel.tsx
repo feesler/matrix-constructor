@@ -12,6 +12,7 @@ import type { AppState } from 'shared/types.ts';
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
 import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
 import { SelectField } from './components/SelectField/SelectField.tsx';
+import { SwitchField } from './components/SwitchField/SwitchField.tsx';
 
 import './SettingsPanel.css';
 
@@ -19,6 +20,11 @@ export const SettingsPanel = () => {
   const context = useAppContext();
   const { getState, dispatch } = useStore<AppState>();
   const state = getState();
+
+  const onToggleIntro = useCallback(() => {
+    const st = getState();
+    dispatch(actions.setIntro(!st.intro));
+  }, []);
 
   const onChangeSpeed = useCallback((value: number) => {
     dispatch(actions.setSpeed(value));
@@ -56,15 +62,26 @@ export const SettingsPanel = () => {
     // dispatch(resizeBuffer(context));
   }, []);
 
-  const { threads } = context?.rendererRef?.current?.props ?? {};
-
   return (
     <section className="data-section">
+
+      <SwitchField
+        id="introSwitch"
+        name="introSwitch"
+        label="Intro"
+        checked={state.intro}
+        onChange={onToggleIntro}
+      />
 
       <ReadOnlyField
         id="threadscount"
         title="Threads"
-        value={threads?.length ?? 0}
+        value={state.threads?.length ?? 0}
+      />
+      <ReadOnlyField
+        id="glitchescount"
+        title="Glitches"
+        value={state.glitches?.length ?? 0}
       />
       <ReadOnlyField
         id="perfvalue"
@@ -97,7 +114,6 @@ export const SettingsPanel = () => {
         title="Glitches ratio"
         min={0}
         max={1}
-        step={0.01}
         value={state.glitchesRatio}
         onChange={onChangeGlitchesRatio}
       />

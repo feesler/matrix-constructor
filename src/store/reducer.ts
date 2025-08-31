@@ -31,6 +31,8 @@ const slice = createSlice<AppState>({
     updating: false,
     timestamp: 0,
     perfValue: 0,
+    threads: [],
+    glitches: [],
   }),
 
   initRenderer: (state: AppState, props: InitRendererProps) => ({
@@ -70,6 +72,8 @@ const slice = createSlice<AppState>({
   pause: (state: AppState): AppState => ({ ...state, paused: true }),
 
   run: (state: AppState): AppState => ({ ...state, paused: false }),
+
+  setIntro: (state: AppState, intro: boolean) => ({ ...state, intro }),
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 

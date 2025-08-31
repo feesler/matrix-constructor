@@ -49,6 +49,7 @@ export function AppContextProvider(
 
     updateTimeout.current = setTimeout(() => {
       updateTimeout.current = 0;
+      previousFrameTimestamp.current = 0;
       requestAnimationFrame(update);
     }, 50);
     // eslint-disable-next-line react-hooks/exhaustive-deps

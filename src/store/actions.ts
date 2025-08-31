@@ -3,7 +3,6 @@ import { type StoreActionAPI, type StoreActionFunction } from '@jezvejs/react';
 import { type AppContext } from 'context/index.ts';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
-import { MAX_CONTENT_LENGTH } from 'shared/constants.ts';
 import { type AppState } from 'shared/types.ts';
 import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils/index.ts';
 import { actions } from './reducer.ts';
@@ -38,7 +37,7 @@ export const run = ({ scheduleUpdate }: AppContext) => ({
 export const resizeBuffer = (
   context: AppContext,
 ): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
-  const st = getState();
+  let st = getState();
   const {
     canvasWidth,
     canvasHeight,
@@ -54,7 +53,7 @@ export const resizeBuffer = (
   }
 
   // Update threads
-  const threadsCount = Math.round((screenArea / MAX_CONTENT_LENGTH) * st.threadsRatio);
+  const threadsCount = Math.round(columnsCount * st.threadsRatio);
 
   let threads = structuredClone(st.threads).filter((thread) => (
     (thread.column < columnsCount)
@@ -70,6 +69,7 @@ export const resizeBuffer = (
     }
   }
   dispatch(actions.setThreads(threads));
+  st = getState();
 
   // Update glitches
   const glitchesCount = Math.round(screenArea * st.glitchesRatio);
@@ -83,10 +83,14 @@ export const resizeBuffer = (
     glitches = glitches.slice(0, glitchesCount);
   } else if (glitchesBalance > 0) {
     for (let i = 0; i < glitchesBalance; i++) {
-      glitches.push(getRandomGlitch(st));
+      const glitch = getRandomGlitch(st);
+      if (glitch) {
+        glitches.push(glitch);
+      }
     }
   }
   dispatch(actions.setGlitches(glitches));
+  st = getState();
 
   const rendererProps = {
     canvas,
