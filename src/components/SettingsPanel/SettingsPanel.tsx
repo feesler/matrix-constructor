@@ -62,8 +62,6 @@ export const SettingsPanel = () => {
     // dispatch(resizeBuffer(context));
   }, []);
 
-  const { threads } = context?.rendererRef?.current?.props ?? {};
-
   return (
     <section className="data-section">
 
@@ -78,7 +76,12 @@ export const SettingsPanel = () => {
       <ReadOnlyField
         id="threadscount"
         title="Threads"
-        value={threads?.length ?? 0}
+        value={state.threads?.length ?? 0}
+      />
+      <ReadOnlyField
+        id="glitchescount"
+        title="Glitches"
+        value={state.glitches?.length ?? 0}
       />
       <ReadOnlyField
         id="perfvalue"
@@ -111,7 +114,6 @@ export const SettingsPanel = () => {
         title="Glitches ratio"
         min={0}
         max={1}
-        step={0.01}
         value={state.glitchesRatio}
         onChange={onChangeGlitchesRatio}
       />

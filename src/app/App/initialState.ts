@@ -27,7 +27,7 @@ export const initialState: AppState = {
   rowsCount: 0,
   speed: 40,
   threadsRatio: 1.5,
-  glitchesRatio: 0.02,
+  glitchesRatio: 0.05,
   fontSize: 18,
   fontWeight: 'normal',
   charWidth: 10,
