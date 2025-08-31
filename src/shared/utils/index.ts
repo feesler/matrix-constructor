@@ -119,14 +119,17 @@ export const getRandomThread = (state: AppState): RendererThread => {
  * @param {boolean} randomOffset
  * @returns {RendererGlitch}
  */
-export const getRandomGlitch = ({ threads }: AppState, randomOffset: boolean = true): RendererGlitch => {
+export const getRandomGlitch = (
+  { threads }: AppState,
+  randomOffset: boolean = true,
+): RendererGlitch => {
   const threadIndex = Math.round(Math.random() * (threads.length - 1));
   const thread = threads[threadIndex] ?? { column: 0, row: 0, content: '' };
 
   const glitchOffset = (randomOffset) ? Math.floor(Math.random() * thread.content.length) : 0;
   const remainingChars = thread.content.length - glitchOffset;
 
-  const column = thread.column;
+  const { column } = thread;
   const row = thread.row - glitchOffset;
 
   const speed = 10 + Math.round(Math.random() * thread.speed);
