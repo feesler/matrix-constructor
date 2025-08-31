@@ -12,6 +12,7 @@ import type { AppState } from 'shared/types.ts';
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
 import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
 import { SelectField } from './components/SelectField/SelectField.tsx';
+import { SwitchField } from './components/SwitchField/SwitchField.tsx';
 
 import './SettingsPanel.css';
 
@@ -19,6 +20,11 @@ export const SettingsPanel = () => {
   const context = useAppContext();
   const { getState, dispatch } = useStore<AppState>();
   const state = getState();
+
+  const onToggleIntro = useCallback(() => {
+    const st = getState();
+    dispatch(actions.setIntro(!st.intro));
+  }, []);
 
   const onChangeSpeed = useCallback((value: number) => {
     dispatch(actions.setSpeed(value));
@@ -60,6 +66,14 @@ export const SettingsPanel = () => {
 
   return (
     <section className="data-section">
+
+      <SwitchField
+        id="introSwitch"
+        name="introSwitch"
+        label="Intro"
+        checked={state.intro}
+        onChange={onToggleIntro}
+      />
 
       <ReadOnlyField
         id="threadscount"

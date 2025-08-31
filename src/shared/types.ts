@@ -91,6 +91,7 @@ export interface AppState {
   fontLoading: boolean;
 
   autoStart: boolean;
+  intro: boolean;
 
   animationDelay: number;
 

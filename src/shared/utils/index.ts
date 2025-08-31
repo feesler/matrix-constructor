@@ -69,12 +69,12 @@ const roundToPrecision = (value: number, precision: number) => {
  * @returns {RendererThread}
  */
 export const getRandomThread = (state: AppState): RendererThread => {
-  const { columnsCount, rowsCount } = state;
+  const { columnsCount, rowsCount, intro } = state;
 
   const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
 
   const column = Math.round(Math.random() * columnsCount);
-  const row = Math.round(Math.random() * rowsCount);
+  const row = Math.round(Math.random() * rowsCount) - (intro ? rowsCount : 0);
 
   // const speed = Math.ceil(Math.random() * 2) / 2; // {0.5, 1.0}
   // const speed = Math.random(); // [0.5, 1.0]
