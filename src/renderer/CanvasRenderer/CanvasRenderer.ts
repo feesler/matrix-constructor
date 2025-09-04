@@ -7,13 +7,13 @@ import type {
   RGBAColor,
   RGBColor,
 } from 'shared/types.ts';
-import type { CanvasFrame } from 'shared/utils/CanvasFrame/CanvasFrame.ts';
+import type { CanvasFrame } from 'renderer/CanvasFrame/CanvasFrame';
 import {
   getGradientColor,
   getRandomGlitch,
   getRandomThread,
   shiftString,
-} from 'shared/utils/index.ts';
+} from 'shared/utils.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;

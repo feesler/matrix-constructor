@@ -4,7 +4,7 @@ import { type AppContext } from 'context/index.ts';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 import { type AppState } from 'shared/types.ts';
-import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils/index.ts';
+import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils.ts';
 import { actions } from './reducer.ts';
 
 export interface MainViewActionsAPI {

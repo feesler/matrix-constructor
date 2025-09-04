@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET, CONTENT_LENGTH_DELTA, MIN_CONTENT_LENGTH } from '../constants.ts';
-import type { AppState, RendererGlitch, RendererThread } from '../types.ts';
+import { ALPHABET, CONTENT_LENGTH_DELTA, MIN_CONTENT_LENGTH } from './constants.ts';
+import type { AppState, RendererGlitch, RendererThread } from './types.ts';
 
 /**
  * Returns string scrolled by specified offset
