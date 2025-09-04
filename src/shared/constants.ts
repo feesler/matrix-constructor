@@ -8,6 +8,8 @@ export const FRAMES_PER_SECOND = 60;
 export const FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
 export const FRAME_DURATION_SEC = FRAME_DURATION / 1000;
 
+export const LEADING_GLOW_THRESHOLD = 0.95;
+
 export const fontWeightsItems = [
   { id: '100', title: '100' },
   { id: '200', title: '200' },
