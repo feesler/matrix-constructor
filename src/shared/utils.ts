@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET, CONTENT_LENGTH_DELTA, MIN_CONTENT_LENGTH } from './constants.ts';
-import type { AppState, RendererGlitch, RendererThread } from './types.ts';
+import { ALPHABET } from './constants.ts';
+import type { AppState, RendererGlitch } from './types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -58,7 +58,13 @@ export const getScreenArea = ({ columnsCount, rowsCount }: AppState): number => 
   columnsCount * rowsCount
 );
 
-const roundToPrecision = (value: number, precision: number) => {
+/**
+ * Returns number rounded to the specified precision
+ * @param {number} value
+ * @param {number} precision
+ * @returns {number}
+ */
+export const roundToPrecision = (value: number, precision: number) => {
   const base = 10 ** Math.round(precision);
   return Math.ceil(value * base) / base;
 };
@@ -79,38 +85,6 @@ export const getRandomString = (length: number): string => {
   }
 
   return characters.join('');
-};
-
-/**
- * Returns new random thread object
- * @param {AppState} state
- * @returns {RendererThread}
- */
-export const getRandomThread = (state: AppState): RendererThread => {
-  const { columnsCount, rowsCount, intro } = state;
-
-  const contentLength = MIN_CONTENT_LENGTH + Math.round(Math.random() * CONTENT_LENGTH_DELTA);
-
-  const column = Math.round(Math.random() * columnsCount);
-  const row = Math.round(Math.random() * rowsCount) - (intro ? rowsCount : 0);
-
-  // const speed = Math.ceil(Math.random() * 2) / 2; // {0.5, 1.0}
-  // const speed = Math.random(); // [0.5, 1.0]
-  // const speed = Math.random() * 0.5 + 0.5; // [0.5, 1.0]
-  // const speed = roundToPrecision(Math.random() * 0.7 + 0.3, 1); // {0.3, 0.4, ... 0.9, 1.0}
-
-  const speed = roundToPrecision(Math.random(), 1); // {0.1, 0.2, ... 0.9, 1.0}
-
-  const thread: RendererThread = {
-    column,
-    row,
-    x: column,
-    y: row,
-    speed,
-    content: getRandomString(contentLength),
-  };
-
-  return thread;
 };
 
 /**

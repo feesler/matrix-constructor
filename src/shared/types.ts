@@ -1,3 +1,4 @@
+import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import type { Canvas2DElement } from '../components/Canvas2D/Canvas2D.tsx';
 
 export interface IdObject {
@@ -61,15 +62,6 @@ export type Canvas = Canvas2DElement;
 
 export interface View {
   canvas: Canvas;
-}
-
-export interface RendererThread {
-  column: number;
-  row: number;
-  x: number;
-  y: number;
-  speed: number;
-  content: string;
 }
 
 export interface RendererGlitch {

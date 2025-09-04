@@ -3,8 +3,9 @@ import { type StoreActionAPI, type StoreActionFunction } from '@jezvejs/react';
 import { type AppContext } from 'context/index.ts';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
+import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import { type AppState } from 'shared/types.ts';
-import { getRandomGlitch, getRandomThread, getScreenArea } from 'shared/utils.ts';
+import { getRandomGlitch, getScreenArea } from 'shared/utils.ts';
 import { actions } from './reducer.ts';
 
 export interface MainViewActionsAPI {
@@ -65,7 +66,7 @@ export const resizeBuffer = (
     threads = threads.slice(0, threadsCount);
   } else if (threadsBalance > 0) {
     for (let i = 0; i < threadsBalance; i++) {
-      threads.push(getRandomThread(st));
+      threads.push(RendererThread.createRandom(st));
     }
   }
   dispatch(actions.setThreads(threads));

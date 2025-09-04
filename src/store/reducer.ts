@@ -1,9 +1,9 @@
 import { createSlice } from '@jezvejs/react';
+import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import type {
   AppState,
   CanvasSizeProps,
   RendererGlitch,
-  RendererThread,
 } from 'shared/types.ts';
 
 export interface InitRendererProps {

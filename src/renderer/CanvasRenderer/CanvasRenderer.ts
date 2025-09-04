@@ -1,17 +1,16 @@
+import type { CanvasFrame } from 'renderer/CanvasFrame/CanvasFrame';
+import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import { CHAR_FONT, FRAMES_PER_SECOND } from 'shared/constants.ts';
 import type {
   AppState,
   Canvas,
   RendererGlitch,
-  RendererThread,
   RGBAColor,
   RGBColor,
 } from 'shared/types.ts';
-import type { CanvasFrame } from 'renderer/CanvasFrame/CanvasFrame';
 import {
   getGradientColor,
   getRandomGlitch,
-  getRandomThread,
   shiftString,
 } from 'shared/utils.ts';
 
@@ -109,47 +108,36 @@ export class CanvasRenderer {
     this.calculateGlitches(state, timeDelta);
   }
 
+  /**
+   * Calculates threads movement
+   * @param {number} state
+   * @param {number} timeDelta
+   */
   calculateThreads(state: AppState, timeDelta: number) {
-    const { rowsCount } = state;
-
     this.props.threads = this.props.threads.map((thread) => {
-      const { content } = thread;
-
-      // Calculate thread movement
-      const stepMove = (thread.speed * state.speed * timeDelta);
-      const targetY = thread.y + stepMove;
-
-      let result = { ...thread };
-      if (targetY > rowsCount + content.length) {
-        result = getRandomThread(state);
-        result.y = 0;
-      } else {
-        result.y = targetY;
-
-        const shift = Math.trunc(result.y) - Math.trunc(result.row);
-        result.content = shiftString(content, shift);
-      }
-      result.row = Math.trunc(result.y);
-
-      // Write thread content to the buffer
-      const charsCount = result.content?.length ?? 0;
-      for (let charIndex = 0; charIndex < charsCount; charIndex++) {
-        const lightness = 1 - ((charIndex + 1) / charsCount);
-
-        const column = Math.round(result.x);
-        const row = result.row - charIndex;
-        const fillStyle = getGradientColor(lightness);
-
-        this.writeToBuffer(
-          column,
-          row,
-          result.content?.charAt(charIndex),
-          fillStyle,
-        );
-      }
+      const result = thread.calculate(state, timeDelta);
+      this.writeThreadToBuffer(result);
 
       return result;
     });
+  }
+
+  writeThreadToBuffer(thread: RendererThread) {
+    const charsCount = thread.content?.length ?? 0;
+    for (let charIndex = 0; charIndex < charsCount; charIndex++) {
+      const lightness = 1 - ((charIndex + 1) / charsCount);
+
+      const column = Math.round(thread.x);
+      const row = thread.row - charIndex;
+      const fillStyle = getGradientColor(lightness);
+
+      this.writeToBuffer(
+        column,
+        row,
+        thread.content?.charAt(charIndex),
+        fillStyle,
+      );
+    }
   }
 
   calculateGlitches(state: AppState, timeDelta: number) {
