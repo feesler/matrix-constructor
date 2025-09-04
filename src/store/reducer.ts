@@ -1,9 +1,9 @@
 import { createSlice } from '@jezvejs/react';
+import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import type {
   AppState,
   CanvasSizeProps,
-  RendererGlitch,
 } from 'shared/types.ts';
 
 export interface InitRendererProps {
@@ -79,7 +79,7 @@ const slice = createSlice<AppState>({
 
   setThreads: (state: AppState, threads: RendererThread[]): AppState => ({
     ...state,
-    threads: structuredClone(threads),
+    threads,
   }),
 
   setThreadsRatio: (state: AppState, threadsRatio: number): AppState => ({
@@ -89,7 +89,7 @@ const slice = createSlice<AppState>({
 
   setGlitches: (state: AppState, glitches: RendererGlitch[]): AppState => ({
     ...state,
-    glitches: structuredClone(glitches),
+    glitches,
   }),
 
   setGlitchesRatio: (state: AppState, glitchesRatio: number): AppState => ({

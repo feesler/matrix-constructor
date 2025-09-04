@@ -1,7 +1,7 @@
 import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
 import { ALPHABET } from './constants.ts';
-import type { AppState, RendererGlitch } from './types.ts';
+import type { AppState } from './types.ts';
 
 /**
  * Returns string scrolled by specified offset
@@ -85,39 +85,4 @@ export const getRandomString = (length: number): string => {
   }
 
   return characters.join('');
-};
-
-/**
- * Returns new random glitch object
- * @param {AppState} param0
- * @param {boolean} randomOffset
- * @returns {RendererGlitch}
- */
-export const getRandomGlitch = (
-  { threads }: AppState,
-  randomOffset: boolean = true,
-): RendererGlitch => {
-  const threadIndex = Math.round(Math.random() * (threads.length - 1));
-  const thread = threads[threadIndex] ?? { column: 0, row: 0, content: '' };
-
-  const glitchOffset = (randomOffset) ? Math.floor(Math.random() * thread.content.length) : 0;
-  const remainingChars = thread.content.length - glitchOffset;
-
-  const { column } = thread;
-  const row = thread.row - glitchOffset;
-
-  const speed = 10 + Math.round(Math.random() * thread.speed);
-  const contentLength = Math.round(Math.random() * remainingChars);
-
-  const glitch: RendererGlitch = {
-    threadIndex,
-    column,
-    row,
-    progress: 0,
-    currentProgress: 0,
-    speed,
-    content: getRandomString(contentLength),
-  };
-
-  return glitch;
 };

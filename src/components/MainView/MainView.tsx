@@ -46,8 +46,6 @@ export const MainView = () => {
 
     const rendererProps = {
       canvas,
-      threads: [],
-      glitches: [],
       canvasWidth: st.canvasWidth,
       canvasHeight: st.canvasHeight,
       columnsCount: st.columnsCount,

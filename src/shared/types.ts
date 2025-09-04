@@ -1,3 +1,4 @@
+import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import type { Canvas2DElement } from '../components/Canvas2D/Canvas2D.tsx';
 
@@ -62,16 +63,6 @@ export type Canvas = Canvas2DElement;
 
 export interface View {
   canvas: Canvas;
-}
-
-export interface RendererGlitch {
-  threadIndex: number;
-  column: number;
-  row: number;
-  progress: number;
-  currentProgress: number;
-  speed: number;
-  content: string;
 }
 
 export interface CanvasSizeProps {

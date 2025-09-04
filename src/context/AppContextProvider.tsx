@@ -74,10 +74,10 @@ export function AppContextProvider(
     const timeDelta = (prevTime !== 0) ? (curTime - prevTime) : 0;
     previousFrameTimestamp.current = curTime;
 
-    renderer.calculate(st, timeDelta);
+    st = renderer.calculate(st, timeDelta);
 
-    dispatch(actions.setThreads(renderer.props.threads));
-    dispatch(actions.setGlitches(renderer.props.glitches));
+    dispatch(actions.setThreads(st.threads));
+    dispatch(actions.setGlitches(st.glitches));
 
     st = getState();
     renderer.drawFrame(st);

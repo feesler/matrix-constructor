@@ -1,23 +1,17 @@
 import type { CanvasFrame } from 'renderer/CanvasFrame/CanvasFrame';
+import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
-import { CHAR_FONT, FRAMES_PER_SECOND } from 'shared/constants.ts';
+import { CHAR_FONT } from 'shared/constants.ts';
 import type {
   AppState,
   Canvas,
-  RendererGlitch,
   RGBAColor,
   RGBColor,
 } from 'shared/types.ts';
-import {
-  getGradientColor,
-  getRandomGlitch,
-  shiftString,
-} from 'shared/utils.ts';
+import { getGradientColor } from 'shared/utils.ts';
 
 export interface CanvasRendererProps {
   canvas: Canvas;
-  threads: RendererThread[];
-  glitches: RendererGlitch[];
   canvasWidth: number;
   canvasHeight: number;
   columnsCount: number;
@@ -104,24 +98,36 @@ export class CanvasRenderer {
   calculate(state: AppState, timeDelta: number) {
     this.createBuffer(state);
 
-    this.calculateThreads(state, timeDelta);
-    this.calculateGlitches(state, timeDelta);
+    let resultState = state;
+
+    resultState = this.calculateThreads(state, timeDelta);
+    resultState = this.calculateGlitches(resultState, timeDelta);
+
+    return resultState;
   }
 
   /**
    * Calculates threads movement
    * @param {number} state
    * @param {number} timeDelta
+   * @returns {AppState}
    */
-  calculateThreads(state: AppState, timeDelta: number) {
-    this.props.threads = this.props.threads.map((thread) => {
-      const result = thread.calculate(state, timeDelta);
-      this.writeThreadToBuffer(result);
+  calculateThreads(state: AppState, timeDelta: number): AppState {
+    return {
+      ...state,
+      threads: state.threads.map((thread) => {
+        const result = thread.calculate(state, timeDelta);
+        this.writeThreadToBuffer(result);
 
-      return result;
-    });
+        return result;
+      }),
+    };
   }
 
+  /**
+   * Writes thread content to the buffer
+   * @param {RendererThread} thread
+   */
   writeThreadToBuffer(thread: RendererThread) {
     const charsCount = thread.content?.length ?? 0;
     for (let charIndex = 0; charIndex < charsCount; charIndex++) {
@@ -140,44 +146,37 @@ export class CanvasRenderer {
     }
   }
 
-  calculateGlitches(state: AppState, timeDelta: number) {
-    this.props.glitches = this.props.glitches.map((glitch) => {
-      let result = { ...glitch };
+  /**
+   * Calculates glitches update
+   * @param {number} state
+   * @param {number} timeDelta
+   * @returns {AppState}
+   */
+  calculateGlitches(state: AppState, timeDelta: number): AppState {
+    return {
+      ...state,
+      glitches: state.glitches.map((glitch) => {
+        const result = glitch.calculate(state, timeDelta);
+        this.writeGlitchToBuffer(result);
 
-      if (!this.props.threads[result.threadIndex]) {
-        result.threadIndex = Math.round(Math.random() * (this.props.threads.length - 1));
-      }
+        return result;
+      }),
+    };
+  }
 
-      const thread = this.props.threads[result.threadIndex];
+  /**
+   * Writes glitch content to the buffer
+   * @param {RendererGlitch} glitch
+   */
+  writeGlitchToBuffer(glitch: RendererGlitch) {
+    const column = Math.round(glitch.column);
+    const row = Math.round(glitch.row);
 
-      const stepMove = (result.speed * state.speed * timeDelta) / FRAMES_PER_SECOND;
-      result.progress += stepMove;
-      result.currentProgress += stepMove;
-
-      const shift = Math.trunc(result.currentProgress);
-      if (shift > 0) {
-        result.content = shiftString(result.content, shift);
-        result.currentProgress = 0;
-      }
-
-      if (
-        result.progress >= result.content.length
-        || (result.column !== thread.column || (result.row <= thread.row - thread.content.length))
-      ) {
-        result = getRandomGlitch(state, false);
-      }
-
-      const column = Math.round(result.column);
-      const row = Math.round(result.row);
-
-      this.writeToBuffer(
-        column,
-        row,
-        result.content?.charAt(0),
-      );
-
-      return result;
-    });
+    this.writeToBuffer(
+      column,
+      row,
+      glitch.content?.charAt(0),
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
