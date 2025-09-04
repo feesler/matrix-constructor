@@ -32,6 +32,7 @@ export const initialState: AppState = {
   fontWeight: 'normal',
   charWidth: 10,
   charHeight: 18,
+  textColorHue: 120,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

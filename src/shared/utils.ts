@@ -1,6 +1,5 @@
-import { hslToRGB, rgbToColor } from '@jezvejs/color';
 import { minmax } from '@jezvejs/react';
-import { ALPHABET } from './constants.ts';
+import { ALPHABET, LEADING_GLOW_THRESHOLD } from './constants.ts';
 import type { AppState } from './types.ts';
 
 /**
@@ -23,20 +22,24 @@ export const shiftString = (value: string, offset: number): string => {
 /**
  * Returns hex color for specified value in the range {0; 1}
  * @param {number} value
+ * @param {number} hue
  * @returns {string}
  */
-export const getGradientColor = (value: number): string => {
+export const getGradientColor = (value: number, hue: number): string => {
   const normalizedValue = minmax(0, 1, value);
-  const lightness = 95 * normalizedValue ** 2;
-  const saturation = 100 * normalizedValue;
+  const isLeadingGlow = normalizedValue > LEADING_GLOW_THRESHOLD;
 
-  const rgbColor = hslToRGB({
-    hue: 120,
-    saturation,
-    lightness,
-  });
+  const normalizedHue = minmax(0, 360, hue);
 
-  return rgbToColor(rgbColor);
+  const lightness = (isLeadingGlow)
+    ? (90 * normalizedValue)
+    : (75 * normalizedValue ** 2);
+
+  const saturation = (isLeadingGlow)
+    ? (100 * normalizedValue ** 2)
+    : (100 * normalizedValue);
+
+  return `hsl(${normalizedHue}deg, ${saturation}%, ${lightness}%)`;
 };
 
 /**

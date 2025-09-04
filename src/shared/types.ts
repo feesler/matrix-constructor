@@ -96,6 +96,9 @@ export interface AppState {
   charWidth: number;
   charHeight: number;
 
+  // Text color
+  textColorHue: number;
+
   threads: RendererThread[];
   threadsRatio: number;
   speed: number;

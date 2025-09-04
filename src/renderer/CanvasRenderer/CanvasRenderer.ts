@@ -117,7 +117,7 @@ export class CanvasRenderer {
       ...state,
       threads: state.threads.map((thread) => {
         const result = thread.calculate(state, timeDelta);
-        this.writeThreadToBuffer(result);
+        this.writeThreadToBuffer(result, state);
 
         return result;
       }),
@@ -127,15 +127,16 @@ export class CanvasRenderer {
   /**
    * Writes thread content to the buffer
    * @param {RendererThread} thread
+   * @param {AppState} state
    */
-  writeThreadToBuffer(thread: RendererThread) {
+  writeThreadToBuffer(thread: RendererThread, state: AppState) {
     const charsCount = thread.content?.length ?? 0;
     for (let charIndex = 0; charIndex < charsCount; charIndex++) {
       const lightness = 1 - ((charIndex + 1) / charsCount);
 
       const column = Math.round(thread.x);
       const row = thread.row - charIndex;
-      const fillStyle = getGradientColor(lightness);
+      const fillStyle = getGradientColor(lightness, state.textColorHue);
 
       this.writeToBuffer(
         column,
@@ -200,18 +201,13 @@ export class CanvasRenderer {
       return;
     }
 
-    const { canvasWidth, canvasHeight } = this.props;
-    const frame = canvas.createFrame({ width: canvasWidth, height: canvasHeight });
-    if (!frame) {
-      return;
-    }
-
-    canvas.drawFrame(frame);
-
     const canvasContext = canvas.elem?.getContext('2d');
     if (!canvasContext) {
       return;
     }
+
+    const { canvasWidth, canvasHeight } = this.props;
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const { fontSize, fontWeight, charWidth } = state;
 

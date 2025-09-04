@@ -104,6 +104,8 @@ const slice = createSlice<AppState>({
   setCharWidth: (state: AppState, charWidth: number): AppState => ({ ...state, charWidth }),
 
   setCharHeight: (state: AppState, charHeight: number): AppState => ({ ...state, charHeight }),
+
+  setHue: (state: AppState, textColorHue: number): AppState => ({ ...state, textColorHue }),
 });
 
 export const { actions, reducer } = slice;

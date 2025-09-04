@@ -42,24 +42,24 @@ export const SettingsPanel = () => {
 
   const onChangeFontSize = useCallback((value: number) => {
     dispatch(actions.setFontSize(value));
-    // dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeFontWeight = useCallback((selected: DropDownSelectionParam) => {
     if (selected && !Array.isArray(selected)) {
       dispatch(actions.setFontWeight(selected.id));
     }
-    // dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeCharWidth = useCallback((value: number) => {
     dispatch(actions.setCharWidth(value));
-    // dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeCharHeight = useCallback((value: number) => {
     dispatch(actions.setCharHeight(value));
-    // dispatch(resizeBuffer(context));
+  }, []);
+
+  const onChangeHue = useCallback((value: number) => {
+    dispatch(actions.setHue(value));
   }, []);
 
   return (
@@ -153,6 +153,16 @@ export const SettingsPanel = () => {
         step={1}
         value={state.charHeight}
         onChange={onChangeCharHeight}
+      />
+
+      <RangeInputField
+        id="hueInp"
+        title="Hue"
+        min={0}
+        max={360}
+        step={1}
+        value={state.textColorHue}
+        onChange={onChangeHue}
       />
 
       <div className="data-footer">
