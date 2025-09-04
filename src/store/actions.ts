@@ -5,6 +5,7 @@ import { type AppContext } from 'context/index.ts';
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
+import { ALPHABET, CHAR_FONT } from 'shared/constants.ts';
 import { type AppState } from 'shared/types.ts';
 import { getScreenArea } from 'shared/utils.ts';
 import { actions } from './reducer.ts';
@@ -108,4 +109,30 @@ export const resizeBuffer = (
 
   rendererRef.current = new CanvasRenderer(rendererProps);
   rendererRef.current.drawFrame(st);
+};
+
+export const resizeCharacter = (
+  context: AppContext,
+): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
+  const { getCanvas, rendererRef } = context;
+  const canvas = getCanvas();
+  if (!rendererRef?.current || !canvas) {
+    return;
+  }
+
+  const canvasContext = canvas.elem?.getContext('2d');
+  if (!canvasContext) {
+    return;
+  }
+
+  const { fontSize, fontWeight } = getState();
+  canvasContext.font = `${fontWeight} ${fontSize}px ${CHAR_FONT}`;
+  canvasContext.textBaseline = 'top';
+
+  const measuredText = canvasContext.measureText(ALPHABET.charAt(0));
+  const charWidth = Math.ceil(measuredText.width);
+  dispatch(actions.setCharWidth(charWidth));
+
+  const charHeight = Math.ceil(fontSize);
+  dispatch(actions.setCharHeight(charHeight));
 };

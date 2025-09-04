@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 
 import { useAppContext } from 'context/index.ts';
 
-import { resizeBuffer } from 'store/actions.ts';
+import { resizeBuffer, resizeCharacter } from 'store/actions.ts';
 import { actions } from 'store/reducer.ts';
 
 import { fontWeightsItems } from 'shared/constants.ts';
@@ -42,6 +42,12 @@ export const SettingsPanel = () => {
 
   const onChangeFontSize = useCallback((value: number) => {
     dispatch(actions.setFontSize(value));
+    dispatch(resizeCharacter(context));
+
+    const { canvasWidth, canvasHeight } = getState();
+    dispatch(actions.setCanvasSize({ canvasWidth, canvasHeight }));
+
+    dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeFontWeight = useCallback((selected: DropDownSelectionParam) => {
