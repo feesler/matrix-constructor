@@ -209,10 +209,18 @@ export class CanvasRenderer {
     const { canvasWidth, canvasHeight } = this.props;
     canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    const { fontSize, fontWeight, charWidth } = state;
+    const {
+      fontSize,
+      fontWeight,
+      charWidth,
+      charHeight,
+    } = state;
+    const xOffset = charWidth / 2;
+    const yOffset = charHeight / 2;
 
     canvasContext.font = `${fontWeight} ${fontSize}px ${CHAR_FONT}`;
-    canvasContext.textBaseline = 'top';
+    canvasContext.textAlign = 'center';
+    canvasContext.textBaseline = 'middle';
 
     const { columnsCount, rowsCount } = this.props;
     for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
@@ -233,7 +241,7 @@ export class CanvasRenderer {
         }
 
         canvasContext.fillStyle = fillStyle;
-        canvasContext.fillText(char, x, y, charWidth);
+        canvasContext.fillText(char, x + xOffset, y + yOffset, charWidth);
       }
     }
   }
