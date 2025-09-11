@@ -1,6 +1,75 @@
 import { minmax } from '@jezvejs/react';
 import { ALPHABET, LEADING_GLOW_THRESHOLD } from './constants.ts';
-import type { AppState } from './types.ts';
+import type { AppState, Point } from './types.ts';
+
+/**
+ * Returns array of Touch objects for specified event
+ * @param {React.TouchEvent} e
+ * @returns {React.Touch[]}
+ */
+export const getEventTouches = (e: React.TouchEvent): React.Touch[] => {
+  const touches = (e.type === 'touchend' || e.type === 'touchcancel')
+    ? e.changedTouches
+    : e.touches;
+
+  return Array.from(touches);
+};
+
+/**
+ * Returns object containing coordinates depending on event type
+ * @param {React.TouchEvent | React.MouseEvent} e
+ * @returns {React.Touch | React.MouseEvent}
+ */
+export const getEventCoordinatesObject = (
+  e: React.TouchEvent | React.MouseEvent,
+): React.Touch | React.MouseEvent => {
+  if ('touches' in e) {
+    const [touch] = getEventTouches(e);
+    return touch;
+  }
+
+  return e;
+};
+
+/**
+ * Returns page coordinates from specified object
+ * @param {React.Touch | React.MouseEvent} source
+ * @returns {Point}
+ */
+export const getPageCoordinates = (source: React.Touch | React.MouseEvent): Point => ({
+  x: source.pageX,
+  y: source.pageY,
+});
+
+/**
+ * Returns client coordinates for specified object
+ * @param {React.Touch | React.MouseEvent} source
+ * @returns {Point}
+ */
+export const getClientCoordinates = (source: React.Touch | React.MouseEvent): Point => ({
+  x: source.clientX,
+  y: source.clientY,
+});
+
+/**
+ * Returns page coordinates for specified event
+ * @param {React.TouchEvent | React.MouseEvent} e
+ * @returns {Point}
+ */
+export const getEventPageCoordinates = (e: React.TouchEvent | React.MouseEvent): Point => {
+  const coords = getEventCoordinatesObject(e);
+  return getPageCoordinates(coords);
+};
+
+/**
+ * Returns client coordinates for specified event
+ * @param {React.TouchEvent | React.MouseEvent} e
+ * @returns {Point}
+ */
+export const getEventClientCoordinates = (e: React.TouchEvent | React.MouseEvent): Point => {
+  const coords = getEventCoordinatesObject(e);
+  return getClientCoordinates(coords);
+};
 
 /**
  * Returns string scrolled by specified offset

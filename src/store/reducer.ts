@@ -1,10 +1,13 @@
 import { createSlice } from '@jezvejs/react';
 import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
+import { RendererWave } from 'renderer/RendererWave/RendererWave.ts';
+import { WAVE_EFFECT_WIDTH } from 'shared/constants.ts';
 import type {
   AppState,
   CanvasSizeProps,
 } from 'shared/types.ts';
+import { getEventPageCoordinates } from 'shared/utils.ts';
 
 export interface InitRendererProps {
   width: number;
@@ -97,6 +100,11 @@ const slice = createSlice<AppState>({
     glitchesRatio,
   }),
 
+  setWaveEffect: (state: AppState, waveEffect: RendererWave | null): AppState => ({
+    ...state,
+    waveEffect,
+  }),
+
   setFontSize: (state: AppState, fontSize: number): AppState => ({ ...state, fontSize }),
 
   setFontWeight: (state: AppState, fontWeight: string): AppState => ({ ...state, fontWeight }),
@@ -106,6 +114,18 @@ const slice = createSlice<AppState>({
   setCharHeight: (state: AppState, charHeight: number): AppState => ({ ...state, charHeight }),
 
   setHue: (state: AppState, textColorHue: number): AppState => ({ ...state, textColorHue }),
+
+  mouseDown: (state: AppState, e: React.MouseEvent): AppState => {
+    const coords = getEventPageCoordinates(e);
+
+    const column = Math.round(coords.x / state.charWidth);
+    const row = Math.round(coords.y / state.charHeight);
+
+    return {
+      ...state,
+      waveEffect: new RendererWave(column, row, WAVE_EFFECT_WIDTH),
+    };
+  },
 });
 
 export const { actions, reducer } = slice;

@@ -36,6 +36,7 @@ export class CanvasRenderer {
 
     resultState = this.calculateThreads(state, timeDelta);
     resultState = this.calculateGlitches(resultState, timeDelta);
+    resultState = this.calculateEffects(resultState, timeDelta);
 
     return resultState;
   }
@@ -80,6 +81,7 @@ export class CanvasRenderer {
         column,
         row,
         thread.content?.charAt(charIndex),
+        lightness,
         fillStyle,
       );
     }
@@ -120,6 +122,82 @@ export class CanvasRenderer {
       row,
       glitch.content?.charAt(0),
     );
+  }
+
+  /**
+   * Calculates effects update
+   * @param {number} state
+   * @param {number} timeDelta
+   * @returns {AppState}
+   */
+  calculateEffects(state: AppState, timeDelta: number): AppState {
+    if (!this.buffer || !state.waveEffect) {
+      return state;
+    }
+
+    const waveEffect = state.waveEffect.calculate(state, timeDelta);
+    if (!waveEffect) {
+      return {
+        ...state,
+        waveEffect,
+      };
+    }
+
+    const { columnsCount, rowsCount } = state;
+
+    const firstWaveColumn = waveEffect.leftColumn;
+    const lastWaveColumn = waveEffect.rightColumn;
+    const firstWaveRow = waveEffect.topRow;
+    const lastWaveRow = waveEffect.bottomRow;
+    const waveWidth = waveEffect.width;
+
+    const screenSize = Math.max(columnsCount, rowsCount);
+
+    for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
+      for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+        if (
+          rowIndex < firstWaveRow
+          || rowIndex > lastWaveRow
+          || (
+            rowIndex > firstWaveRow + waveWidth
+            && rowIndex < lastWaveRow - waveWidth
+            && columnIndex > firstWaveColumn + waveWidth
+            && columnIndex < lastWaveColumn - waveWidth
+          )
+          || columnIndex < firstWaveColumn
+          || columnIndex > lastWaveColumn
+        ) {
+          continue;
+        }
+
+        const bufferChar = this.buffer.read(columnIndex, rowIndex);
+        if (!bufferChar) {
+          continue;
+        }
+
+        const {
+          char,
+          column,
+          row,
+        } = bufferChar;
+
+        const lightness = bufferChar.lightness + screenSize / waveEffect.size;
+        const fillStyle = getGradientColor(lightness, state.textColorHue);
+
+        this.buffer.write(
+          column,
+          row,
+          char,
+          lightness,
+          fillStyle,
+        );
+      }
+    }
+
+    return {
+      ...state,
+      waveEffect,
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function

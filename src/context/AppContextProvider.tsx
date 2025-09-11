@@ -78,6 +78,7 @@ export function AppContextProvider(
 
     dispatch(actions.setThreads(st.threads));
     dispatch(actions.setGlitches(st.glitches));
+    dispatch(actions.setWaveEffect(st.waveEffect));
 
     st = getState();
     renderer.drawFrame(st);

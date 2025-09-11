@@ -2,6 +2,7 @@ import { AppState } from 'shared/types.ts';
 
 export interface ScreenChar {
   char: string;
+  lightness: number;
   fillStyle: string;
   column: number;
   row: number;
@@ -30,6 +31,7 @@ export class ConsoleBuffer {
       for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         column.push({
           char: '',
+          lightness: 0,
           fillStyle: '',
           column: columnIndex,
           row: rowIndex,
@@ -47,9 +49,10 @@ export class ConsoleBuffer {
    * @param {number} column
    * @param {number} row
    * @param {string} char
+   * @param {number} lightness
    * @param {string} fillStyle
    */
-  write(column: number, row: number, char: string, fillStyle?: string) {
+  write(column: number, row: number, char: string, lightness?: number, fillStyle?: string) {
     if (column < 0 || column >= this.buffer.length) {
       return;
     }
@@ -61,6 +64,9 @@ export class ConsoleBuffer {
 
     const screenChar = bufferColumn[row];
     screenChar.char = char;
+    if (typeof lightness === 'number') {
+      screenChar.lightness = lightness;
+    }
     if (typeof fillStyle === 'string') {
       screenChar.fillStyle = fillStyle;
     }
