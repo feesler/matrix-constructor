@@ -1,4 +1,5 @@
 import type { CanvasFrame } from 'renderer/CanvasFrame/CanvasFrame';
+import { ConsoleBuffer } from 'renderer/ConsoleBuffer/ConsoleBuffer.ts';
 import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import { CHAR_FONT } from 'shared/constants.ts';
@@ -18,81 +19,14 @@ export interface CanvasRendererProps {
   rowsCount: number;
 }
 
-export interface ScreenChar {
-  char: string;
-  fillStyle: string;
-  column: number;
-  row: number;
-  x: number;
-  y: number;
-}
-
 export class CanvasRenderer {
-  buffer: ScreenChar[][] = [];
+  buffer: ConsoleBuffer | null = null;
 
   constructor(public props: CanvasRendererProps) {
   }
 
   createBuffer(state: AppState) {
-    const {
-      columnsCount,
-      rowsCount,
-      charWidth,
-      charHeight,
-    } = state;
-
-    this.buffer = [];
-
-    for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
-      const column: ScreenChar[] = [];
-      const x = charWidth * columnIndex;
-
-      for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-        column.push({
-          char: '',
-          fillStyle: '',
-          column: columnIndex,
-          row: rowIndex,
-          x,
-          y: charHeight * rowIndex,
-        });
-      }
-
-      this.buffer.push(column);
-    }
-  }
-
-  writeToBuffer(column: number, row: number, char: string, fillStyle?: string) {
-    if (column < 0 || column >= this.buffer.length) {
-      return;
-    }
-
-    const bufferColumn = this.buffer[column];
-    if (row < 0 || row >= bufferColumn.length) {
-      return;
-    }
-
-    const screenChar = bufferColumn[row];
-    screenChar.char = char;
-    if (typeof fillStyle === 'string') {
-      screenChar.fillStyle = fillStyle;
-    }
-  }
-
-  readFromBuffer(column: number, row: number): ScreenChar | null {
-    if (column < 0 || column >= this.buffer.length) {
-      return null;
-    }
-
-    const bufferColumn = this.buffer[column];
-    if (row < 0 || row >= bufferColumn.length) {
-      return null;
-    }
-
-    const screenChar = bufferColumn[row];
-    return {
-      ...screenChar,
-    };
+    this.buffer = new ConsoleBuffer(state);
   }
 
   calculate(state: AppState, timeDelta: number) {
@@ -130,6 +64,10 @@ export class CanvasRenderer {
    * @param {AppState} state
    */
   writeThreadToBuffer(thread: RendererThread, state: AppState) {
+    if (!this.buffer) {
+      return;
+    }
+
     const charsCount = thread.content?.length ?? 0;
     for (let charIndex = 0; charIndex < charsCount; charIndex++) {
       const lightness = 1 - ((charIndex + 1) / charsCount);
@@ -138,7 +76,7 @@ export class CanvasRenderer {
       const row = thread.row - charIndex;
       const fillStyle = getGradientColor(lightness, state.textColorHue);
 
-      this.writeToBuffer(
+      this.buffer.write(
         column,
         row,
         thread.content?.charAt(charIndex),
@@ -170,10 +108,14 @@ export class CanvasRenderer {
    * @param {RendererGlitch} glitch
    */
   writeGlitchToBuffer(glitch: RendererGlitch) {
+    if (!this.buffer) {
+      return;
+    }
+
     const column = Math.round(glitch.column);
     const row = Math.round(glitch.row);
 
-    this.writeToBuffer(
+    this.buffer.write(
       column,
       row,
       glitch.content?.charAt(0),
@@ -197,7 +139,7 @@ export class CanvasRenderer {
 
   drawFrameByPixels(state: AppState) {
     const { canvas } = this.props;
-    if (!canvas) {
+    if (!canvas || !this.buffer) {
       return;
     }
 
@@ -225,7 +167,7 @@ export class CanvasRenderer {
     const { columnsCount, rowsCount } = this.props;
     for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
       for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-        const bufferChar = this.readFromBuffer(columnIndex, rowIndex);
+        const bufferChar = this.buffer.read(columnIndex, rowIndex);
         if (!bufferChar) {
           continue;
         }
