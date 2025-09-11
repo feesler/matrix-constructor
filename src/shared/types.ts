@@ -1,6 +1,7 @@
+import type { Canvas2DElement } from 'components/Canvas2D/Canvas2D.tsx';
 import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
-import type { Canvas2DElement } from '../components/Canvas2D/Canvas2D.tsx';
+import { RendererWave } from 'renderer/RendererWave/RendererWave.ts';
 
 export interface IdObject {
   id: string;
@@ -105,6 +106,8 @@ export interface AppState {
 
   glitches: RendererGlitch[];
   glitchesRatio: number;
+
+  waveEffect: RendererWave | null;
 
   fitToScreenRequested: boolean;
 

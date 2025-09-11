@@ -8,6 +8,7 @@ export const defaultProps = {
   height: SCENE_SIZE,
   threads: [],
   glitches: [],
+  waveEffect: null,
 };
 
 export const initialState: AppState = {
