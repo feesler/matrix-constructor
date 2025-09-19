@@ -126,10 +126,12 @@ const slice = createSlice<AppState>({
 
     const column = Math.round(coords.x / state.charWidth);
     const row = Math.round(coords.y / state.charHeight);
+    const width = WAVE_EFFECT_WIDTH;
+    const height = Math.round((width * state.charWidth) / state.charHeight);
 
     return {
       ...state,
-      waveEffect: new RendererWave(column, row, WAVE_EFFECT_WIDTH),
+      waveEffect: new RendererWave(column, row, width, height),
     };
   },
 });
