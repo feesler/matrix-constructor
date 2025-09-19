@@ -91,6 +91,8 @@ export interface AppState {
   width: number;
   height: number;
 
+  // Font settings
+  fontSettingsExpanded: boolean;
   fontSize: number;
   fontWeight: string;
 

@@ -105,6 +105,12 @@ const slice = createSlice<AppState>({
     waveEffect,
   }),
 
+  // Font settings
+  toggleFontCollapsible: (state: AppState): AppState => ({
+    ...state,
+    fontSettingsExpanded: !state.fontSettingsExpanded,
+  }),
+
   setFontSize: (state: AppState, fontSize: number): AppState => ({ ...state, fontSize }),
 
   setFontWeight: (state: AppState, fontWeight: string): AppState => ({ ...state, fontWeight }),

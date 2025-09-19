@@ -12,6 +12,7 @@ import type { AppState } from 'shared/types.ts';
 import { RangeInputField } from './components/RangeInputField/RangeInputField.tsx';
 import { ReadOnlyField } from './components/ReadOnlyField/ReadOnlyField.tsx';
 import { SelectField } from './components/SelectField/SelectField.tsx';
+import { SettingsPanelCollapsible } from './components/SettingsPanelCollapsible/SettingsPanelCollapsible.tsx';
 import { SwitchField } from './components/SwitchField/SwitchField.tsx';
 
 import './SettingsPanel.css';
@@ -38,6 +39,11 @@ export const SettingsPanel = () => {
   const onChangeThreadsRatio = useCallback((value: number) => {
     dispatch(actions.setThreadsRatio(value));
     dispatch(resizeBuffer(context));
+  }, []);
+
+  // Font collapsible block
+  const onToggleFontCollapsible = useCallback(() => {
+    dispatch(actions.toggleFontCollapsible());
   }, []);
 
   const onChangeFontSize = useCallback((value: number) => {
@@ -124,42 +130,50 @@ export const SettingsPanel = () => {
         onChange={onChangeGlitchesRatio}
       />
 
-      <RangeInputField
-        id="fontSizeInp"
-        title="Font size"
-        min={0}
-        max={100}
-        step={0.01}
-        value={state.fontSize}
-        onChange={onChangeFontSize}
-      />
+      <SettingsPanelCollapsible
+        title="Font"
+        onStateChange={onToggleFontCollapsible}
+        expanded={state.fontSettingsExpanded}
+        animated
+      >
+        <RangeInputField
+          id="fontSizeInp"
+          title="Font size"
+          min={0}
+          max={100}
+          step={0.01}
+          value={state.fontSize}
+          onChange={onChangeFontSize}
+        />
 
-      <SelectField
-        id="fontWeightSelect"
-        title="Font weight"
-        items={fontWeightsItems}
-        onChange={onChangeFontWeight}
-      />
+        <SelectField
+          id="fontWeightSelect"
+          title="Font weight"
+          items={fontWeightsItems}
+          onChange={onChangeFontWeight}
+          static
+        />
 
-      <RangeInputField
-        id="charWidthInp"
-        title="Char width"
-        min={0}
-        max={100}
-        step={1}
-        value={state.charWidth}
-        onChange={onChangeCharWidth}
-      />
+        <RangeInputField
+          id="charWidthInp"
+          title="Char width"
+          min={0}
+          max={100}
+          step={1}
+          value={state.charWidth}
+          onChange={onChangeCharWidth}
+        />
 
-      <RangeInputField
-        id="charHeightInp"
-        title="Char height"
-        min={0}
-        max={100}
-        step={1}
-        value={state.charHeight}
-        onChange={onChangeCharHeight}
-      />
+        <RangeInputField
+          id="charHeightInp"
+          title="Char height"
+          min={0}
+          max={100}
+          step={1}
+          value={state.charHeight}
+          onChange={onChangeCharHeight}
+        />
+      </SettingsPanelCollapsible>
 
       <RangeInputField
         id="hueInp"

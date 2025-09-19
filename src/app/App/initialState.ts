@@ -29,6 +29,8 @@ export const initialState: AppState = {
   speed: 40,
   threadsRatio: 1.5,
   glitchesRatio: 0.05,
+  // Font settings
+  fontSettingsExpanded: false,
   fontSize: 18,
   fontWeight: 'normal',
   charWidth: 10,
