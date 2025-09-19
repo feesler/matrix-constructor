@@ -1,4 +1,3 @@
-import { WAVE_EFFECT_SPEED } from 'shared/constants.ts';
 import { AppState } from 'shared/types.ts';
 
 export class RendererWave {
@@ -21,8 +20,6 @@ export class RendererWave {
   horizontalSize: number;
 
   verticalSize: number;
-
-  speed: number;
 
   /**
    * Returns new copy of the specified wave effect object
@@ -47,7 +44,6 @@ export class RendererWave {
     this.height = height;
     this.horizontalSize = 0;
     this.verticalSize = 0;
-    this.speed = WAVE_EFFECT_SPEED;
   }
 
   /**
@@ -89,7 +85,7 @@ export class RendererWave {
     }
 
     const result = RendererWave.createCopy(this);
-    const step = timeDelta * this.speed;
+    const step = timeDelta * state.waveEffectSpeed;
 
     const charAspectRatio = state.charWidth / state.charHeight;
     const horizontalStep = step;

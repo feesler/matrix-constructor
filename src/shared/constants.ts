@@ -10,9 +10,6 @@ export const FRAME_DURATION_SEC = FRAME_DURATION / 1000;
 
 export const LEADING_GLOW_THRESHOLD = 0.95;
 
-export const WAVE_EFFECT_WIDTH = 7;
-export const WAVE_EFFECT_SPEED = 100;
-
 export const fontWeightsItems = [
   { id: '100', title: '100' },
   { id: '200', title: '200' },

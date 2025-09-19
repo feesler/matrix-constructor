@@ -74,6 +74,24 @@ export const SettingsPanel = () => {
     dispatch(actions.setHue(value));
   }, []);
 
+  // Wave effect collapsible block
+  const onToggleWaveEffectCollapsible = useCallback(() => {
+    dispatch(actions.toggleWaveEffectCollapsible());
+  }, []);
+
+  const onToggleWaveEffectOnClick = useCallback(() => {
+    const st = getState();
+    dispatch(actions.setWaveEffectOnClick(!st.waveEffectOnClick));
+  }, []);
+
+  const onChangeWaveEffectSize = useCallback((value: number) => {
+    dispatch(actions.setWaveEffectSize(value));
+  }, []);
+
+  const onChangeWaveEffectSpeed = useCallback((value: number) => {
+    dispatch(actions.setWaveEffectSpeed(value));
+  }, []);
+
   return (
     <section className="data-section">
 
@@ -173,17 +191,52 @@ export const SettingsPanel = () => {
           value={state.charHeight}
           onChange={onChangeCharHeight}
         />
+
+        <RangeInputField
+          id="hueInp"
+          title="Hue"
+          min={0}
+          max={360}
+          step={1}
+          value={state.textColorHue}
+          onChange={onChangeHue}
+        />
       </SettingsPanelCollapsible>
 
-      <RangeInputField
-        id="hueInp"
-        title="Hue"
-        min={0}
-        max={360}
-        step={1}
-        value={state.textColorHue}
-        onChange={onChangeHue}
-      />
+      <SettingsPanelCollapsible
+        title="Wave effect"
+        onStateChange={onToggleWaveEffectCollapsible}
+        expanded={state.waveEffectSettingsExpanded}
+        animated
+      >
+        <SwitchField
+          id="waveEffectSwitch"
+          name="waveEffectSwitch"
+          label="Create wave on click"
+          checked={state.waveEffectOnClick}
+          onChange={onToggleWaveEffectOnClick}
+        />
+
+        <RangeInputField
+          id="waveEffectSizeInp"
+          title="Size"
+          min={1}
+          max={50}
+          step={1}
+          value={state.waveEffectSize}
+          onChange={onChangeWaveEffectSize}
+        />
+
+        <RangeInputField
+          id="waveEffectSizeInp"
+          title="Size"
+          min={1}
+          max={500}
+          step={1}
+          value={state.waveEffectSpeed}
+          onChange={onChangeWaveEffectSpeed}
+        />
+      </SettingsPanelCollapsible>
 
       <div className="data-footer">
       </div>

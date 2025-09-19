@@ -36,6 +36,11 @@ export const initialState: AppState = {
   charWidth: 10,
   charHeight: 18,
   textColorHue: 120,
+  // Wave effect
+  waveEffectSettingsExpanded: false,
+  waveEffectOnClick: true,
+  waveEffectSize: 7,
+  waveEffectSpeed: 100,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

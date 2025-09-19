@@ -2,7 +2,6 @@ import { createSlice } from '@jezvejs/react';
 import { RendererGlitch } from 'renderer/RendererGlitch/RendererGlitch.ts';
 import { RendererThread } from 'renderer/RendererThread/RendererThread.ts';
 import { RendererWave } from 'renderer/RendererWave/RendererWave.ts';
-import { WAVE_EFFECT_WIDTH } from 'shared/constants.ts';
 import type {
   AppState,
   CanvasSizeProps,
@@ -100,11 +99,6 @@ const slice = createSlice<AppState>({
     glitchesRatio,
   }),
 
-  setWaveEffect: (state: AppState, waveEffect: RendererWave | null): AppState => ({
-    ...state,
-    waveEffect,
-  }),
-
   // Font settings
   toggleFontCollapsible: (state: AppState): AppState => ({
     ...state,
@@ -121,19 +115,50 @@ const slice = createSlice<AppState>({
 
   setHue: (state: AppState, textColorHue: number): AppState => ({ ...state, textColorHue }),
 
+  // Wave effect
   mouseDown: (state: AppState, e: React.MouseEvent): AppState => {
+    if (!state.waveEffectOnClick) {
+      return state;
+    }
+
     const coords = getEventPageCoordinates(e);
 
     const column = Math.round(coords.x / state.charWidth);
     const row = Math.round(coords.y / state.charHeight);
-    const width = WAVE_EFFECT_WIDTH;
-    const height = Math.round((width * state.charWidth) / state.charHeight);
+    const charAspectRatio = state.charWidth / state.charHeight;
+    const width = state.waveEffectSize;
+    const height = Math.round(width * charAspectRatio);
 
     return {
       ...state,
       waveEffect: new RendererWave(column, row, width, height),
     };
   },
+
+  toggleWaveEffectCollapsible: (state: AppState): AppState => ({
+    ...state,
+    waveEffectSettingsExpanded: !state.waveEffectSettingsExpanded,
+  }),
+
+  setWaveEffect: (state: AppState, waveEffect: RendererWave | null): AppState => ({
+    ...state,
+    waveEffect,
+  }),
+
+  setWaveEffectOnClick: (state: AppState, waveEffectOnClick: boolean): AppState => ({
+    ...state,
+    waveEffectOnClick,
+  }),
+
+  setWaveEffectSize: (state: AppState, waveEffectSize: number): AppState => ({
+    ...state,
+    waveEffectSize,
+  }),
+
+  setWaveEffectSpeed: (state: AppState, waveEffectSpeed: number): AppState => ({
+    ...state,
+    waveEffectSpeed,
+  }),
 });
 
 export const { actions, reducer } = slice;
