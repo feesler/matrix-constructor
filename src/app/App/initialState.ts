@@ -29,11 +29,18 @@ export const initialState: AppState = {
   speed: 40,
   threadsRatio: 1.5,
   glitchesRatio: 0.05,
+  // Font settings
+  fontSettingsExpanded: false,
   fontSize: 18,
   fontWeight: 'normal',
   charWidth: 10,
   charHeight: 18,
   textColorHue: 120,
+  // Wave effect
+  waveEffectSettingsExpanded: false,
+  waveEffectOnClick: true,
+  waveEffectSize: 7,
+  waveEffectSpeed: 100,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({

@@ -150,8 +150,11 @@ export class CanvasRenderer {
     const firstWaveRow = waveEffect.topRow;
     const lastWaveRow = waveEffect.bottomRow;
     const waveWidth = waveEffect.width;
+    const waveHeight = waveEffect.height;
 
     const screenSize = Math.max(columnsCount, rowsCount);
+    const waveSize = Math.max(waveEffect.horizontalSize, waveEffect.verticalSize);
+    const waveToScreenRatio = Math.min(1, waveSize / screenSize);
 
     for (let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
       for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
@@ -159,8 +162,8 @@ export class CanvasRenderer {
           rowIndex < firstWaveRow
           || rowIndex > lastWaveRow
           || (
-            rowIndex > firstWaveRow + waveWidth
-            && rowIndex < lastWaveRow - waveWidth
+            rowIndex > firstWaveRow + waveHeight
+            && rowIndex < lastWaveRow - waveHeight
             && columnIndex > firstWaveColumn + waveWidth
             && columnIndex < lastWaveColumn - waveWidth
           )
@@ -181,7 +184,7 @@ export class CanvasRenderer {
           row,
         } = bufferChar;
 
-        const lightness = bufferChar.lightness + screenSize / waveEffect.size;
+        const lightness = bufferChar.lightness + (1 - waveToScreenRatio);
         const fillStyle = getGradientColor(lightness, state.textColorHue);
 
         this.buffer.write(
@@ -200,8 +203,15 @@ export class CanvasRenderer {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reset() {
+    const { canvas } = this.props;
+    const canvasContext = canvas?.elem?.getContext('2d');
+    if (!canvasContext) {
+      return;
+    }
+
+    const { canvasWidth, canvasHeight } = this.props;
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
   putPixel(frame: CanvasFrame, x: number, y: number, color: RGBAColor | RGBColor) {

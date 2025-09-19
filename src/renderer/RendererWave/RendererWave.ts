@@ -1,4 +1,3 @@
-import { WAVE_EFFECT_SPEED } from 'shared/constants.ts';
 import { AppState } from 'shared/types.ts';
 
 export class RendererWave {
@@ -16,9 +15,11 @@ export class RendererWave {
 
   width: number;
 
-  size: number;
+  height: number;
 
-  speed: number;
+  horizontalSize: number;
+
+  verticalSize: number;
 
   /**
    * Returns new copy of the specified wave effect object
@@ -26,13 +27,13 @@ export class RendererWave {
    * @returns {RendererWave}
    */
   static createCopy(source: RendererWave): RendererWave {
-    const thread = new this(source.leftColumn, source.topRow, source.width);
+    const thread = new this(source.leftColumn, source.topRow, source.width, source.height);
     thread.copy(source);
 
     return thread;
   }
 
-  constructor(column: number, row: number, width: number) {
+  constructor(column: number, row: number, width: number, height: number) {
     this.leftColumn = column;
     this.rightColumn = column;
     this.topRow = row;
@@ -40,8 +41,9 @@ export class RendererWave {
     this.x = this.leftColumn;
     this.y = this.topRow;
     this.width = width;
-    this.size = 0;
-    this.speed = WAVE_EFFECT_SPEED;
+    this.height = height;
+    this.horizontalSize = 0;
+    this.verticalSize = 0;
   }
 
   /**
@@ -56,7 +58,9 @@ export class RendererWave {
     this.x = source.x;
     this.y = source.y;
     this.width = source.width;
-    this.size = source.size;
+    this.height = source.height;
+    this.horizontalSize = source.horizontalSize;
+    this.verticalSize = source.verticalSize;
   }
 
   /**
@@ -71,9 +75,9 @@ export class RendererWave {
 
     const isEffectVisible = (
       this.leftColumn + this.width >= 0
-      || this.rightColumn < rowsCount
-      || this.topRow + this.width >= 0
-      || this.bottomRow < columnsCount
+      || this.rightColumn < columnsCount
+      || this.topRow + this.height >= 0
+      || this.bottomRow < rowsCount
     );
 
     if (!isEffectVisible) {
@@ -81,15 +85,20 @@ export class RendererWave {
     }
 
     const result = RendererWave.createCopy(this);
-    const step = timeDelta * this.speed;
+    const step = timeDelta * state.waveEffectSpeed;
 
-    result.y -= step;
-    result.x -= step;
-    result.size += step * 2;
+    const charAspectRatio = state.charWidth / state.charHeight;
+    const horizontalStep = step;
+    const verticalStep = step * charAspectRatio;
+
+    result.y -= verticalStep;
+    result.x -= horizontalStep;
+    result.horizontalSize += horizontalStep * 2;
+    result.verticalSize += verticalStep * 2;
     result.leftColumn = Math.round(result.x);
-    result.rightColumn = Math.round(result.x + result.size);
+    result.rightColumn = Math.round(result.x + result.horizontalSize);
     result.topRow = Math.round(result.y);
-    result.bottomRow = Math.round(result.y + result.size);
+    result.bottomRow = Math.round(result.y + result.verticalSize);
 
     return result;
   }

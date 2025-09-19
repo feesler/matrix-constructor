@@ -91,6 +91,8 @@ export interface AppState {
   width: number;
   height: number;
 
+  // Font settings
+  fontSettingsExpanded: boolean;
   fontSize: number;
   fontWeight: string;
 
@@ -107,7 +109,12 @@ export interface AppState {
   glitches: RendererGlitch[];
   glitchesRatio: number;
 
+  // Wave effect
+  waveEffectSettingsExpanded: boolean;
   waveEffect: RendererWave | null;
+  waveEffectOnClick: boolean;
+  waveEffectSize: number;
+  waveEffectSpeed: number;
 
   fitToScreenRequested: boolean;
 
