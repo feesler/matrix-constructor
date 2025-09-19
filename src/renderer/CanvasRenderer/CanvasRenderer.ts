@@ -203,8 +203,15 @@ export class CanvasRenderer {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reset() {
+    const { canvas } = this.props;
+    const canvasContext = canvas?.elem?.getContext('2d');
+    if (!canvasContext) {
+      return;
+    }
+
+    const { canvasWidth, canvasHeight } = this.props;
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
   putPixel(frame: CanvasFrame, x: number, y: number, color: RGBAColor | RGBColor) {

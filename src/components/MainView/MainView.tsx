@@ -66,6 +66,9 @@ export const MainView = () => {
   };
 
   const resetRenderer = () => {
+    const st = getState();
+    const pausedBefore = st.paused;
+
     dispatch(pause());
 
     clearRenderer();
@@ -78,6 +81,10 @@ export const MainView = () => {
 
     requestAnimationFrame(() => {
       start();
+
+      if (!pausedBefore) {
+        initBufferAndRun();
+      }
     });
   };
 
