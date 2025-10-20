@@ -75,7 +75,7 @@ const slice = createSlice<AppState>({
 
   run: (state: AppState): AppState => ({ ...state, paused: false }),
 
-  setIntro: (state: AppState, intro: boolean) => ({ ...state, intro }),
+  toggleIntro: (state: AppState) => ({ ...state, intro: !state.intro }),
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 
@@ -109,9 +109,17 @@ const slice = createSlice<AppState>({
 
   setFontWeight: (state: AppState, fontWeight: string): AppState => ({ ...state, fontWeight }),
 
-  setCharWidth: (state: AppState, charWidth: number): AppState => ({ ...state, charWidth }),
+  setCharWidth: (state: AppState, charWidth: number): AppState => ({
+    ...state,
+    charWidth,
+    columnsCount: Math.ceil(state.canvasWidth / charWidth),
+  }),
 
-  setCharHeight: (state: AppState, charHeight: number): AppState => ({ ...state, charHeight }),
+  setCharHeight: (state: AppState, charHeight: number): AppState => ({
+    ...state,
+    charHeight,
+    rowsCount: Math.ceil(state.canvasHeight / charHeight),
+  }),
 
   setHue: (state: AppState, textColorHue: number): AppState => ({ ...state, textColorHue }),
 

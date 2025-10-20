@@ -23,8 +23,7 @@ export const SettingsPanel = () => {
   const state = getState();
 
   const onToggleIntro = useCallback(() => {
-    const st = getState();
-    dispatch(actions.setIntro(!st.intro));
+    dispatch(actions.toggleIntro());
   }, []);
 
   const onChangeSpeed = useCallback((value: number) => {
@@ -49,10 +48,6 @@ export const SettingsPanel = () => {
   const onChangeFontSize = useCallback((value: number) => {
     dispatch(actions.setFontSize(value));
     dispatch(resizeCharacter(context));
-
-    const { canvasWidth, canvasHeight } = getState();
-    dispatch(actions.setCanvasSize({ canvasWidth, canvasHeight }));
-
     dispatch(resizeBuffer(context));
   }, []);
 
@@ -64,10 +59,12 @@ export const SettingsPanel = () => {
 
   const onChangeCharWidth = useCallback((value: number) => {
     dispatch(actions.setCharWidth(value));
+    dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeCharHeight = useCallback((value: number) => {
     dispatch(actions.setCharHeight(value));
+    dispatch(resizeBuffer(context));
   }, []);
 
   const onChangeHue = useCallback((value: number) => {

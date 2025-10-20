@@ -129,10 +129,24 @@ export const resizeCharacter = (
   canvasContext.font = `${fontWeight} ${fontSize}px ${CHAR_FONT}`;
   canvasContext.textBaseline = 'top';
 
-  const measuredText = canvasContext.measureText(ALPHABET.charAt(0));
-  const charWidth = Math.ceil(measuredText.width);
-  dispatch(actions.setCharWidth(charWidth));
+  let charWidth = 0;
+  let charHeight = 0;
 
-  const charHeight = Math.ceil(fontSize);
+  for (let i = 0; i < ALPHABET.length; i++) {
+    const char = ALPHABET.charAt(i);
+    const {
+      fontBoundingBoxAscent,
+      fontBoundingBoxDescent,
+      width,
+    } = canvasContext.measureText(char);
+
+    charWidth = Math.max(Math.ceil(width), charWidth);
+    charHeight = Math.max(
+      Math.ceil(Math.abs(fontBoundingBoxAscent - fontBoundingBoxDescent)),
+      charHeight,
+    );
+  }
+
+  dispatch(actions.setCharWidth(charWidth));
   dispatch(actions.setCharHeight(charHeight));
 };
