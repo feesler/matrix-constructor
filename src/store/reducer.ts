@@ -75,7 +75,7 @@ const slice = createSlice<AppState>({
 
   run: (state: AppState): AppState => ({ ...state, paused: false }),
 
-  setIntro: (state: AppState, intro: boolean) => ({ ...state, intro }),
+  toggleIntro: (state: AppState) => ({ ...state, intro: !state.intro }),
 
   setSpeed: (state: AppState, speed: number): AppState => ({ ...state, speed }),
 

@@ -23,8 +23,7 @@ export const SettingsPanel = () => {
   const state = getState();
 
   const onToggleIntro = useCallback(() => {
-    const st = getState();
-    dispatch(actions.setIntro(!st.intro));
+    dispatch(actions.toggleIntro());
   }, []);
 
   const onChangeSpeed = useCallback((value: number) => {
