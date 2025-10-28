@@ -31,10 +31,10 @@ export const initialState: AppState = {
   glitchesRatio: 0.05,
   // Font settings
   fontSettingsExpanded: false,
-  fontSize: 18,
+  fontSize: 20,
   fontWeight: 'normal',
-  charWidth: 10,
-  charHeight: 18,
+  charWidth: 20,
+  charHeight: 20,
   textColorHue: 120,
   // Wave effect
   waveEffectSettingsExpanded: false,
