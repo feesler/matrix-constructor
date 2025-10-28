@@ -23,6 +23,11 @@ export type Canvas2DRef = Canvas2DElement | null;
 
 export type CanvasProps = React.CanvasHTMLAttributes<HTMLCanvasElement>;
 
+export const preventDefaultHandler = (e: Event) => {
+  e?.preventDefault();
+  e?.stopPropagation();
+};
+
 export const Canvas2D = forwardRef<
   Canvas2DRef,
   CanvasProps
@@ -72,7 +77,13 @@ export const Canvas2D = forwardRef<
     }
 
     contextRef.current = innerRef.current.getContext('2d');
-  }, []);
+
+    innerRef.current.addEventListener('wheel', preventDefaultHandler, { passive: false, capture: true });
+
+    return () => {
+      innerRef.current?.removeEventListener('wheel', preventDefaultHandler, { capture: true });
+    };
+  }, [innerRef.current]);
 
   return (
     <canvas {...props} ref={innerRef} />
