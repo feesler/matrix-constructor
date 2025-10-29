@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: space-between;
   color: #dddddd;
-  padding: 1rem;
+  padding: 1rem 0;
+  margin: 0 1rem;
 }
 
 .read-only-field label {

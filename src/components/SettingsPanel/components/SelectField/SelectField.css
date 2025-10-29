@@ -1,6 +1,6 @@
 .select-field {
   display: grid;
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem 0;
 }
 
 .select-field label {

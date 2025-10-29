@@ -1,6 +1,7 @@
 .range-input-field {
   display: grid;
-  padding: 1rem;
+  padding: 1rem 0;
+  margin: 0 1rem;
 }
 
 .range-input-field__main {
