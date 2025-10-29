@@ -141,6 +141,7 @@ export const SettingsPanel = () => {
         title="Glitches ratio"
         min={0}
         max={1}
+        step={0.01}
         value={state.glitchesRatio}
         onChange={onChangeGlitchesRatio}
       />
@@ -156,7 +157,7 @@ export const SettingsPanel = () => {
           title="Font size"
           min={0}
           max={100}
-          step={0.01}
+          step={0.1}
           value={state.fontSize}
           onChange={onChangeFontSize}
         />
@@ -226,7 +227,7 @@ export const SettingsPanel = () => {
 
         <RangeInputField
           id="waveEffectSizeInp"
-          title="Size"
+          title="Speed"
           min={1}
           max={500}
           step={1}

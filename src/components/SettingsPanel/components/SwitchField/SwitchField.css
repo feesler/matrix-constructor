@@ -5,7 +5,10 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  width: 100%;
   max-width: 300px;
-  padding: 1rem;
+}
+
+.switch-field {
+  padding: 1rem 0;
+  margin: 0 1rem;
 }

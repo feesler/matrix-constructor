@@ -15,7 +15,7 @@
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .settings-panel-collapsible__header .header__icon {
@@ -29,6 +29,13 @@
   width: 100%;
 }
 
-.settings-panel-collapsible .collapsible-content .range-input-field {
+.settings-panel-collapsible .collapsible-content .range-input-field,
+.settings-panel-collapsible .collapsible-content .select-field,
+.settings-panel-collapsible .collapsible-content .switch-field {
   border-bottom: 1px solid var(--input-border-color);
+}
+
+.settings-panel-collapsible .collapse__content-wrapper > div {
+  margin-left: 0;
+  margin-right: 0;
 }
