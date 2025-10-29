@@ -73,7 +73,7 @@ export const Canvas2D = forwardRef<
 
   useEffect(() => {
     if (!innerRef.current) {
-      return;
+      return undefined;
     }
 
     contextRef.current = innerRef.current.getContext('2d');
