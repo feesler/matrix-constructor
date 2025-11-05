@@ -10,11 +10,6 @@ import { type AppState } from 'shared/types.ts';
 import { getScreenArea } from 'shared/utils.ts';
 import { actions } from './reducer.ts';
 
-export interface MainViewActionsAPI {
-  scheduleUpdate: () => void;
-  processRotation: (a: number, b: number, g: number) => void;
-}
-
 export const pause = (): StoreActionFunction<AppState> => ({ getState, dispatch }) => {
   const st = getState();
   if (st.paused) {
