@@ -1,6 +1,6 @@
 import { CONTENT_LENGTH_DELTA, MIN_CONTENT_LENGTH } from 'shared/constants.ts';
 import type { AppState } from 'shared/types.ts';
-import { getRandomString, roundToPrecision, shiftString } from 'shared/utils.ts';
+import { getRandomString, shiftString } from 'shared/utils.ts';
 
 /**
  * Single thread of falling code
@@ -57,12 +57,7 @@ export class RendererThread {
     this.x = this.column;
     this.y = this.row;
 
-    // const speed = Math.ceil(Math.random() * 2) / 2; // {0.5, 1.0}
-    // const speed = Math.random(); // [0.5, 1.0]
-    // const speed = Math.random() * 0.5 + 0.5; // [0.5, 1.0]
-    // const speed = roundToPrecision(Math.random() * 0.7 + 0.3, 1); // {0.3, 0.4, ... 0.9, 1.0}
-
-    this.speed = roundToPrecision(Math.random(), 1); // {0.1, 0.2, ... 0.9, 1.0}
+    this.speed = Math.ceil(Math.random() * 2) / 2; // {1.0, 2.0}
 
     this.content = getRandomString(contentLength);
   }
