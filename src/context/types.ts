@@ -9,5 +9,6 @@ export interface AppContext {
   getCanvasRef: () => React.MutableRefObject<Canvas2DRef>;
   getCanvas: () => Canvas2DRef | null;
 
+  scheduleDraw: () => void;
   scheduleUpdate: () => void;
 }

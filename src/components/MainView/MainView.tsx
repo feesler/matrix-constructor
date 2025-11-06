@@ -25,7 +25,7 @@ import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
   const context = useAppContext();
-  const { rendererRef, getCanvas } = context;
+  const { rendererRef, getCanvas, scheduleDraw } = context;
 
   const initRenderer = () => {
     dispatch(actions.initRenderer({ ...defaultProps }));
@@ -54,7 +54,7 @@ export const MainView = () => {
 
     rendererRef.current = new CanvasRenderer(rendererProps);
 
-    rendererRef.current?.drawFrame(st);
+    rendererRef.current?.updateFrame(st);
 
     if (st.autoStart) {
       initBufferAndRun();
@@ -161,9 +161,10 @@ export const MainView = () => {
       fitToScreen();
     }
 
-    await waitForFontLoad();
-
-    if (!pausedBefore) {
+    if (pausedBefore) {
+      dispatch(resizeBuffer(context));
+      scheduleDraw();
+    } else {
       initBufferAndRun();
     }
   };

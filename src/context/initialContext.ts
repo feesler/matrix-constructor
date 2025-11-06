@@ -8,6 +8,6 @@ export const initialAppContext: AppContext = {
   getCanvasRef: () => ({ current: null }),
   getCanvas: () => null,
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   scheduleUpdate: () => { },
+  scheduleDraw: () => { },
 };

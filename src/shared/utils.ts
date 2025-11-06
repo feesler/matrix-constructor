@@ -108,7 +108,7 @@ export const getGradientColor = (value: number, hue: number): string => {
     ? (100 * normalizedValue ** 2)
     : (100 * normalizedValue);
 
-  return `hsl(${normalizedHue}deg, ${saturation}%, ${lightness}%)`;
+  return `hsl(${normalizedHue}deg, ${saturation.toFixed(2)}%, ${lightness.toFixed(2)}%)`;
 };
 
 /**
