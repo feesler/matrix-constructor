@@ -41,6 +41,14 @@ export class CanvasRenderer {
     return resultState;
   }
 
+  writeStateToBuffer(state: AppState) {
+    this.createBuffer(state);
+
+    this.writeThreadsToBuffer(state);
+    this.writeGlitchesToBuffer(state);
+    this.writeEffectsToBuffer(state);
+  }
+
   /**
    * Calculates threads movement
    * @param {number} state
@@ -57,6 +65,16 @@ export class CanvasRenderer {
         return result;
       }),
     };
+  }
+
+  /**
+   * Writes current threads state to the buffer
+   * @param {AppState} state
+   */
+  writeThreadsToBuffer(state: AppState) {
+    state.threads.forEach((thread) => {
+      this.writeThreadToBuffer(thread, state);
+    });
   }
 
   /**
@@ -106,6 +124,16 @@ export class CanvasRenderer {
   }
 
   /**
+   * Writes current glitches state to the buffer
+   * @param {AppState} state
+   */
+  writeGlitchesToBuffer(state: AppState) {
+    state.glitches.forEach((glitch) => {
+      this.writeGlitchToBuffer(glitch);
+    });
+  }
+
+  /**
    * Writes glitch content to the buffer
    * @param {RendererGlitch} glitch
    */
@@ -125,25 +153,14 @@ export class CanvasRenderer {
   }
 
   /**
-   * Calculates effects update
-   * @param {number} state
-   * @param {number} timeDelta
-   * @returns {AppState}
+   * Writes current glitches state to the buffer
+   * @param {AppState} state
    */
-  calculateEffects(state: AppState, timeDelta: number): AppState {
-    if (!this.buffer || !state.waveEffect) {
-      return state;
+  writeEffectsToBuffer(state: AppState) {
+    const { columnsCount, rowsCount, waveEffect } = state;
+    if (!this.buffer || !waveEffect) {
+      return;
     }
-
-    const waveEffect = state.waveEffect.calculate(state, timeDelta);
-    if (!waveEffect) {
-      return {
-        ...state,
-        waveEffect,
-      };
-    }
-
-    const { columnsCount, rowsCount } = state;
 
     const firstWaveColumn = waveEffect.leftColumn;
     const lastWaveColumn = waveEffect.rightColumn;
@@ -196,11 +213,27 @@ export class CanvasRenderer {
         );
       }
     }
+  }
 
-    return {
+  /**
+   * Calculates effects update
+   * @param {number} state
+   * @param {number} timeDelta
+   * @returns {AppState}
+   */
+  calculateEffects(state: AppState, timeDelta: number): AppState {
+    if (!this.buffer || !state.waveEffect) {
+      return state;
+    }
+
+    const newState = {
       ...state,
-      waveEffect,
+      waveEffect: state.waveEffect.calculate(state, timeDelta),
     };
+
+    this.writeEffectsToBuffer(newState);
+
+    return newState;
   }
 
   reset() {
@@ -235,9 +268,6 @@ export class CanvasRenderer {
     if (!canvasContext) {
       return;
     }
-
-    const { canvasWidth, canvasHeight } = this.props;
-    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const {
       fontSize,
@@ -277,6 +307,11 @@ export class CanvasRenderer {
   }
 
   drawFrame(state: AppState) {
+    this.drawFrameByPixels(state);
+  }
+
+  updateFrame(state: AppState) {
+    this.reset();
     this.drawFrameByPixels(state);
   }
 }

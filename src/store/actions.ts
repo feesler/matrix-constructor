@@ -103,7 +103,8 @@ export const resizeBuffer = (
   };
 
   rendererRef.current = new CanvasRenderer(rendererProps);
-  rendererRef.current.drawFrame(st);
+  rendererRef.current.createBuffer(st);
+  rendererRef.current.updateFrame(st);
 };
 
 export const resizeCharacter = (

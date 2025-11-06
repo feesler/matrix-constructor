@@ -27,6 +27,7 @@ export function AppContextProvider(
   const { getState, dispatch } = useStore<AppState>();
 
   const previousFrameTimestamp = useRef<number>(0);
+  const drawTimeout = useRef<number>(0);
   const updateTimeout = useRef<number>(0);
 
   const rendererRef = useRef<CanvasRenderer | null>(null);
@@ -42,16 +43,44 @@ export function AppContextProvider(
     return ref.current;
   }, []);
 
+  const scheduleDraw = useCallback(() => {
+    if (drawTimeout.current) {
+      return;
+    }
+
+    drawTimeout.current = setTimeout(() => {
+      requestAnimationFrame(() => {
+        draw();
+        drawTimeout.current = 0;
+      });
+    }, 10);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const draw = () => {
+    const renderer = rendererRef.current;
+    if (!renderer) {
+      return;
+    }
+
+    const st = getState();
+
+    renderer.writeStateToBuffer(st);
+    renderer.drawFrame(st);
+  };
+
   const scheduleUpdate = useCallback(() => {
     if (updateTimeout.current) {
-      clearTimeout(updateTimeout.current);
+      return;
     }
 
     updateTimeout.current = setTimeout(() => {
-      updateTimeout.current = 0;
       previousFrameTimestamp.current = 0;
-      requestAnimationFrame(update);
-    }, 50);
+      requestAnimationFrame((time) => {
+        update(time);
+        updateTimeout.current = 0;
+      });
+    }, 10);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -81,7 +110,7 @@ export function AppContextProvider(
     dispatch(actions.setWaveEffect(st.waveEffect));
 
     st = getState();
-    renderer.drawFrame(st);
+    renderer.updateFrame(st);
 
     const perfValue = Math.round(performance.now() - pBefore);
     dispatch(actions.setPerformance(perfValue));
@@ -99,7 +128,8 @@ export function AppContextProvider(
     getCanvasRef,
     getCanvas,
     scheduleUpdate,
-  }), [rendererRef, getCanvas, scheduleUpdate]);
+    scheduleDraw,
+  }), [rendererRef, getCanvas, scheduleUpdate, scheduleDraw]);
 
   return (
     <ApplicationContext.Provider value={contextValue}>
