@@ -1,5 +1,3 @@
-export const SCENE_SIZE = 100;
-
 export const MIN_CONTENT_LENGTH = 30;
 export const MAX_CONTENT_LENGTH = 60;
 export const CONTENT_LENGTH_DELTA = MAX_CONTENT_LENGTH - MIN_CONTENT_LENGTH;

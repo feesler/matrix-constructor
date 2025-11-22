@@ -23,7 +23,6 @@ export function useFontLoad(context: StoreProviderContext<AppState>) {
   );
 
   useEffect(() => {
-
     const loadFont = async () => {
       const st = getState();
       if (st.fontLoaded || st.fontLoading) {
