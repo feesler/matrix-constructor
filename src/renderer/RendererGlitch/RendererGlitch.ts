@@ -24,10 +24,10 @@ export class RendererGlitch {
    * @returns {RendererGlitch}
    */
   static createRandom(state: AppState, randomOffset: boolean = true): RendererGlitch {
-    const thread = new this();
-    thread.randomInit(state, randomOffset);
+    const glitch = new this();
+    glitch.randomInit(state, randomOffset);
 
-    return thread;
+    return glitch;
   }
 
   /**

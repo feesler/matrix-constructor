@@ -1,11 +1,8 @@
-import { SCENE_SIZE } from '../../shared/constants.ts';
 import type { AppState } from '../../shared/types.ts';
 
 export const defaultProps = {
   autoStart: false,
   animationDelay: 10,
-  width: SCENE_SIZE,
-  height: SCENE_SIZE,
   threads: [],
   glitches: [],
   waveEffect: null,

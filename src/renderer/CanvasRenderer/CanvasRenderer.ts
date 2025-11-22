@@ -56,15 +56,18 @@ export class CanvasRenderer {
    * @returns {AppState}
    */
   calculateThreads(state: AppState, timeDelta: number): AppState {
-    return {
+    const newState = {
       ...state,
-      threads: state.threads.map((thread) => {
-        const result = thread.calculate(state, timeDelta);
-        this.writeThreadToBuffer(result, state);
-
-        return result;
-      }),
+      threads: [...state.threads],
     };
+
+    newState.threads.forEach((thread, index) => {
+      const result = thread.calculate(newState, timeDelta);
+      newState.threads[index] = result;
+      this.writeThreadToBuffer(result, newState);
+    });
+
+    return newState;
   }
 
   /**

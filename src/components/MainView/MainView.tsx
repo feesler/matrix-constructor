@@ -21,11 +21,14 @@ import { SettingsPanel } from 'components/SettingsPanel/SettingsPanel.tsx';
 import { Toolbar } from 'components/Toolbar/Toolbar.tsx';
 
 import { CanvasRenderer } from 'renderer/CanvasRenderer/CanvasRenderer.ts';
+import { useFontLoad } from 'shared/hooks/use-font-load.ts';
 
 export const MainView = () => {
   const { state, getState, dispatch } = useStore<AppState>();
   const context = useAppContext();
   const { rendererRef, getCanvas, scheduleDraw } = context;
+
+  const fontLoaded = useFontLoad(useStore());
 
   const initRenderer = () => {
     dispatch(actions.initRenderer({ ...defaultProps }));
@@ -115,22 +118,6 @@ export const MainView = () => {
     dispatch(actions.requestFitToScreen(notResized));
   };
 
-  const waitForFontLoad = async () => (
-    new Promise((resolve) => {
-      const checkState = () => {
-        const st = getState();
-
-        if (st.fontLoaded) {
-          resolve(true);
-        } else {
-          setTimeout(checkState, 50);
-        }
-      };
-
-      checkState();
-    })
-  );
-
   const resizeHandler = async () => {
     const st = getState();
     const rect = mainRef.current?.getBoundingClientRect() ?? null;
@@ -183,36 +170,19 @@ export const MainView = () => {
     };
   }, [mainRef.current]);
 
-  // Font loading
-  const loadFont = async () => {
-    const st = getState();
-    if (st.fontLoaded || st.fontLoading) {
-      return;
-    }
-
-    dispatch(actions.setFontLoading(true));
-
-    const font = new FontFace('code', 'url("assets/code.woff")');
-    await font.load();
-    document.fonts.add(font);
-
-    dispatch(actions.setFontLoading(false));
-    dispatch(actions.setFontLoaded());
-
-    await waitForFontLoad();
-  };
-
   const init = async () => {
-    await loadFont();
-
     start();
 
     resetRenderer();
   };
 
   useEffect(() => {
+    if (!fontLoaded) {
+      return;
+    }
+
     init();
-  }, []);
+  }, [fontLoaded]);
 
   const onClose = useCallback(() => {
     dispatch(actions.showOffcanvas(false));
