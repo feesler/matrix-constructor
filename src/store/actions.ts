@@ -65,7 +65,8 @@ export const resizeBuffer = (
     threads = threads.slice(0, threadsCount);
   } else if (threadsBalance > 0) {
     for (let i = 0; i < threadsBalance; i++) {
-      threads.push(RendererThread.createRandom(st));
+      const thread = RendererThread.createRandom({ ...st, threads });
+      threads.push(thread);
     }
   }
   dispatch(actions.setThreads(threads));
