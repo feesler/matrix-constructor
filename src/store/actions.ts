@@ -79,6 +79,8 @@ export const resizeBuffer = (
     .filter((glitch) => (
       glitch.column < columnsCount
       && glitch.row < rowsCount
+      && glitch.threadIndex >= 0
+      && glitch.threadIndex < threadsCount
     ));
 
   const glitchesBalance = glitchesCount - glitches.length;
