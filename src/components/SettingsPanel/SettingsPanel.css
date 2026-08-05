@@ -5,6 +5,7 @@
   min-width: 300px;
   max-width: 400px;
   padding: 1rem 0;
+  user-select: none;
 }
 
 .data-section > div {

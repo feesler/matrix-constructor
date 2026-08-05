@@ -93,12 +93,18 @@ export class RendererGlitch {
     const { threads } = state;
 
     let result = RendererGlitch.createCopy(this);
+    if (threads.length < 1) {
+      return result;
+    }
 
     if (!threads[result.threadIndex]) {
       result.threadIndex = Math.round(Math.random() * (threads.length - 1));
     }
 
     const thread = threads[result.threadIndex];
+    if (!thread) {
+      return RendererGlitch.createCopy(this);
+    }
 
     const stepMove = (result.speed * state.speed * timeDelta) / FRAMES_PER_SECOND;
     result.progress += stepMove;
