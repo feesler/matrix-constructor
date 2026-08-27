@@ -122,4 +122,6 @@ export interface AppState {
   perfValue: number;
 
   settingsVisible: boolean;
+
+  appVersion: string;
 }

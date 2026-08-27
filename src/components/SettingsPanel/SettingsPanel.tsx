@@ -237,6 +237,11 @@ export const SettingsPanel = () => {
       </SettingsPanelCollapsible>
 
       <div className="data-footer">
+        <ReadOnlyField
+          id="appVersion"
+          title="Version"
+          value={state.appVersion}
+        />
       </div>
     </section>
   );

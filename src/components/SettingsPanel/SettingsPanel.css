@@ -28,8 +28,10 @@
   width: var(--btn-size);
 }
 
-.data-footer {
+.data-section > .data-footer {
+  margin: 0;
   padding-bottom: 2rem;
+  color: var(--main-text-color);
 }
 
 /* Paths collapsible components */
