@@ -1,4 +1,5 @@
 import type { AppState } from '../../shared/types.ts';
+import packageConfig from '../../../package.json';
 
 export const defaultProps = {
   autoStart: false,
@@ -38,6 +39,8 @@ export const initialState: AppState = {
   waveEffectOnClick: true,
   waveEffectSize: 7,
   waveEffectSpeed: 100,
+  // Application version
+  appVersion: packageConfig.version,
 };
 
 export const getInitialState = (props = {}, defProps = defaultProps) => ({
